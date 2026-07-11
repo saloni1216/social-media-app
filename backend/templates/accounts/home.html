@@ -1,0 +1,80 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Accounts API</title>
+
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>👤 Accounts API</h1>
+
+<p>User Authentication Module</p>
+
+<div class="status">
+
+<span class="dot"></span>
+
+Running
+
+</div>
+
+<div class="card">
+
+<h2>Available Endpoints</h2>
+
+<a href="/api/accounts/register/">
+POST • Register User
+</a>
+
+<a href="#">
+POST • Login
+</a>
+
+<a href="#">
+POST • Logout
+</a>
+
+<a href="#">
+GET • User Profile
+</a>
+
+<a href="#">
+PUT • Update Profile
+</a>
+
+<a href="#">
+POST • Change Password
+</a>
+
+</div>
+
+<div class="card">
+
+<h2>Module Information</h2>
+
+<p>
+
+Responsible for user registration, authentication,
+profile management and security.
+
+</p>
+
+</div>
+
+<footer>
+
+Socialize Accounts Module
+
+</footer>
+
+</div>
+
+</body>
+</html>
