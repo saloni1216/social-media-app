@@ -1,0 +1,109 @@
+.right-sidebar{
+
+    width:320px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+}
+
+.card{
+
+    background:#1F2937;
+
+    border-radius:18px;
+
+    padding:20px;
+
+}
+
+.card h3{
+
+    color:white;
+
+    margin-bottom:18px;
+
+}
+
+.card p{
+
+    color:#CBD5E1;
+
+    margin:12px 0;
+
+    cursor:pointer;
+
+}
+
+.friend{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:18px;
+
+}
+
+.friend-info{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+.friend-info img{
+
+    width:45px;
+
+    height:45px;
+
+    border-radius:50%;
+
+}
+
+.friend-info span{
+
+    color:white;
+
+}
+
+.friend button{
+
+    border:none;
+
+    background:#7C3AED;
+
+    color:white;
+
+    padding:8px 16px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+}
+
+.friend button:hover{
+
+    background:#8B5CF6;
+
+}
+
+@media(max-width:1200px){
+
+.right-sidebar{
+
+display:none;
+
+}
+
+}

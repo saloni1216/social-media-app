@@ -1,0 +1,148 @@
+.sidebar{
+
+    width:280px;
+
+    background:#1F2937;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:25px;
+
+    height:fit-content;
+
+}
+
+.profile-card{
+
+    text-align:center;
+
+}
+
+.profile-card img{
+
+    width:90px;
+    height:90px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:3px solid #7C3AED;
+
+}
+
+.profile-card h3{
+
+    color:white;
+
+    margin-top:15px;
+
+}
+
+.profile-card span{
+
+    color:#A78BFA;
+
+    font-size:14px;
+
+}
+
+.sidebar-menu{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+}
+
+.sidebar-menu button{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    border:none;
+
+    background:none;
+
+    color:#D1D5DB;
+
+    padding:14px 18px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    font-size:16px;
+
+}
+
+.sidebar-menu button:hover{
+
+    background:#374151;
+
+}
+
+.sidebar-menu .active{
+
+    background:#7C3AED;
+
+    color:white;
+
+}
+
+.logout-btn{
+
+    margin-top:auto;
+
+    border:none;
+
+    background:#374151;
+
+    color:white;
+
+    border-radius:12px;
+
+    padding:15px;
+
+    cursor:pointer;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+.logout-btn:hover{
+
+    background:#EF4444;
+
+}
+
+/* Mobile */
+
+@media(max-width:992px){
+
+.sidebar{
+
+display:none;
+
+}
+
+}
