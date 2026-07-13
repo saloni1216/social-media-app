@@ -1,181 +1,167 @@
 import "./Register.css";
 import { Link } from "react-router-dom";
-
-import {
-    FaUser,
-    FaEnvelope,
-    FaLock,
-    FaEye,
-} from "react-icons/fa";
-
+import { FaUser, FaEnvelope, FaLock, FaEye } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { registerUser } from "../../services/authService";
 
 function Register() {
-    return (
-        <div className="register-page">
+  const navigate = useNavigate();
 
-            <div className="left-side">
+  const [formData, setFormData] = useState({
+    username: "",
+    full_name: "",
+    email: "",
+    password: "",
+  });
 
-                <div className="brand">
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-                    <div className="logo-circle">
-                        S
-                    </div>
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-                    <h1>Socialize</h1>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-                    <p>
-                        Connect. Share. Inspire.
-                    </p>
+    try {
+      setLoading(true);
 
-                    <span>
-                        Create your account and join the community.
-                    </span>
+      await registerUser(formData);
 
-                    <div className="features">
+      alert("Registration Successful 🎉");
 
-                        <div className="feature">
-                            🚀 Fast & Secure Authentication
-                        </div>
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
 
-                        <div className="feature">
-                            💬 Chat with Friends
-                        </div>
+      setError("Registration failed.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-                        <div className="feature">
-                            ❤️ Share Posts & Moments
-                        </div>
+  return (
+    <div className="register-page">
+      <div className="left-side">
+        <div className="brand">
+          <div className="logo-circle">S</div>
 
-                    </div>
+          <h1>Socialize</h1>
 
-                </div>
+          <p>Connect. Share. Inspire.</p>
 
-            </div>
+          <span>Create your account and join the community.</span>
 
-            <div className="right-side">
-
-                <div className="register-card">
-
-                    <h2>Create Account</h2>
-
-                    <p>
-                        Sign up to start your journey.
-                    </p>
-
-                    <form>
-
-                        <div className="input-box">
-
-                            <label>Full Name</label>
-
-                            <div className="input-field">
-
-                                <FaUser />
-
-                                <input
-                                    type="text"
-                                    placeholder="Enter your full name"
-                                />
-
-                            </div>
-
-                        </div>
-
-                        <div className="input-box">
-
-                            <label>Email</label>
-
-                            <div className="input-field">
-
-                                <FaEnvelope />
-
-                                <input
-                                    type="email"
-                                    placeholder="Enter your email"
-                                />
-
-                            </div>
-
-                        </div>
-
-                        <div className="input-box">
-
-                            <label>Password</label>
-
-                            <div className="input-field">
-
-                                <FaLock />
-
-                                <input
-                                    type="password"
-                                    placeholder="Create password"
-                                />
-
-                                <FaEye className="eye" />
-
-                            </div>
-
-                        </div>
-
-                        <div className="input-box">
-
-                            <label>Confirm Password</label>
-
-                            <div className="input-field">
-
-                                <FaLock />
-
-                                <input
-                                    type="password"
-                                    placeholder="Confirm password"
-                                />
-
-                                <FaEye className="eye" />
-
-                            </div>
-
-                        </div>
-
-                        <button className="register-btn">
-
-                            Create Account
-
-                        </button>
-
-                    </form>
-
-                    <div className="divider">
-
-                        <span>OR</span>
-
-                    </div>
-
-                    <button className="google-btn">
-
-                        <FcGoogle size={22} />
-
-                        Continue with Google
-
-                    </button>
-
-                    <div className="bottom-text">
-
-                        Already have an account?
-
-                        <Link to="/login">
-
-                            Sign In
-
-                        </Link>
-
-                    </div>
-
-                </div>
-
-            </div>
-
+          <div className="features">
+            <div className="feature">🚀 Fast & Secure Authentication</div>
+            <div className="feature">💬 Chat with Friends</div>
+            <div className="feature">❤️ Share Posts & Moments</div>
+          </div>
         </div>
-    );
+      </div>
+
+      <div className="right-side">
+        <div className="register-card">
+          <h2>Create Account</h2>
+
+          <p>Sign up to start your journey.</p>
+
+          <form onSubmit={handleSubmit}>
+            <div className="input-box">
+              <label>Full Name</label>
+
+              <div className="input-field">
+                <FaUser />
+
+                <input
+                  type="text"
+                  name="full_name"
+                  value={formData.full_name}
+                  onChange={handleChange}
+                  placeholder="Full Name"
+                />
+              </div>
+            </div>
+
+            <div className="input-box">
+              <label>Email</label>
+
+              <div className="input-field">
+                <FaEnvelope />
+
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            <div className="input-box">
+              <label>Password</label>
+
+              <div className="input-field">
+                <FaLock />
+                <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+
+                <FaEye className="eye" />
+              </div>
+            </div>
+
+            <div className="input-box">
+              <label>Confirm Password</label>
+
+              <div className="input-field">
+                <FaLock />
+
+                <input
+                  type="password"
+                  name="confirm_password"
+                  value={formData.confirm_password}
+                  onChange={handleChange}
+                  placeholder="Confirm password"
+                />
+
+                <FaEye className="eye" />
+              </div>
+            </div>
+
+            {error && <p className="error">{error}</p>}
+
+            <button className="register-btn">
+              {loading ? "Creating Account..." : "Create Account"}
+            </button>
+          </form>
+
+          <div className="divider">
+            <span>OR</span>
+          </div>
+
+          <button className="google-btn">
+            <FcGoogle size={22} />
+            Continue with Google
+          </button>
+
+          <div className="bottom-text">
+            Already have an account?
+            <Link to="/login">Sign In</Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default Register;

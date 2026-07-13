@@ -642,3 +642,10 @@
     font-size: 13px;
   }
 }
+
+.error {
+  color: #ff5b5b;
+  margin-bottom: 15px;
+  text-align: center;
+  font-size: 14px;
+}
