@@ -1,10 +1,25 @@
 from rest_framework import serializers
 from .models import PostModel
+from accounts.models import CustomUser
+
+
+class PostUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = (
+            "id",
+            "full_name",
+            "username",
+            "profile_picture",
+        )
 
 
 class PostSerializer(serializers.ModelSerializer):
 
+    user = PostUserSerializer(read_only=True)
+
     likes_count = serializers.SerializerMethodField()
+
     is_liked = serializers.SerializerMethodField()
 
     class Meta:
@@ -31,7 +46,6 @@ class PostSerializer(serializers.ModelSerializer):
         return obj.likes.count()
 
     def get_is_liked(self, obj):
-
         request = self.context.get("request")
 
         if request is None:

@@ -1,41 +1,34 @@
 import "./ProfileDropdown.css";
 import { FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
+import { useContext } from "react";
+import { AuthContext } from "../../../context/AuthContext";
+import { Link } from "react-router-dom";
+import { getImageUrl } from "../../../utils/imageHelper";
 
-function ProfileDropdown() {
-    return (
-        <div className="profile-dropdown">
+function ProfileDropdown({ onLogout }) {
+  const { user } = useContext(AuthContext);
 
-            <div className="dropdown-header">
+  return (
+    <div className="profile-dropdown">
+      <div className="dropdown-header">
+   <img
+ src={getImageUrl(user?.profile_picture)}
+ alt="profile"
+/>
 
-                <img
-                    src="https://i.pravatar.cc/150?img=47"
-                    alt="profile"
-                />
+        <div>
+          <h4>{user?.full_name || "User"}</h4>
 
-                <div>
-                    <h4>Saloni Singh</h4>
-                    <span>saloni@gmail.com</span>
-                </div>
-
-            </div>
-
-            <button>
-                <FaUser />
-                My Profile
-            </button>
-
-            <button>
-                <FaCog />
-                Settings
-            </button>
-
-            <button className="logout">
-                <FaSignOutAlt />
-                Logout
-            </button>
-
+          <span>{user?.email || "user@gmail.com"}</span>
         </div>
-    );
+      </div>
+
+      <button onClick={onLogout} className="logout">
+        <FaSignOutAlt />
+        Logout
+      </button>
+    </div>
+  );
 }
 
 export default ProfileDropdown;

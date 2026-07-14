@@ -94,6 +94,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         exclude = (
+            "username",
             "password",
             "groups",
             "user_permissions",
@@ -104,6 +105,7 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = (
             "full_name",
+            "username",
             "bio",
             "website",
             "location",

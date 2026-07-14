@@ -7,3 +7,9 @@ export const loginUser = (data) => {
 export const registerUser = (data) => {
     return api.post("accounts/register/", data);
 };
+
+export const logoutUser = (refresh) => {
+    return api.post("accounts/logout/", {
+        refresh,
+    });
+};

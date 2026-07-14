@@ -15,12 +15,21 @@ class CreatePostView(generics.CreateAPIView):
 
 
 class PostListView(generics.ListAPIView):
-
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return PostModel.objects.all().order_by("-created_at")
+        return (
+            PostModel.objects
+            .select_related("user")
+            .prefetch_related("likes")
+            .order_by("-created_at")
+        )
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["request"] = self.request
+        return context
 
 
 class PostDetailView(generics.RetrieveAPIView):

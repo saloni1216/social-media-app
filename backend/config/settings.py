@@ -1,4 +1,5 @@
 from pathlib import Path
+from datetime import timedelta
 from django.urls import reverse_lazy
 
 
@@ -7,13 +8,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-ll_^#0%zogsb!n7le36me&$^^^e=+rxz$xg4c_=0ax(pz7fuay'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-# Application definition
 
 INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
@@ -123,6 +121,24 @@ STATICFILES_DIRS = [BASE_DIR / "static",]
 
 
 AUTH_USER_MODEL = "accounts.CustomUser"
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+}
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": True,
+}
+
+
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 

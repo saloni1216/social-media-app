@@ -1,228 +1,190 @@
-.navbar{
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 999;
 
-    position: sticky;
-    top:0;
+  height: 75px;
 
-    height:75px;
+  background: #111827;
 
-    background:#111827;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-    padding:0 40px;
-
-    border-bottom:1px solid rgba(255,255,255,.08);
-
-    z-index:100;
-
+  padding: 0 35px;
 }
 
-.navbar-logo h2{
+/* Logo */
 
-    color:white;
-
-    font-size:30px;
-
-    font-weight:700;
-
+.navbar-logo h2 {
+  color: white;
+  font-size: 36px;
+  font-weight: 700;
 }
 
-.navbar-search{
+/* Search */
 
-    width:420px;
+.navbar-search {
+  width: 520px;
+  height: 48px;
 
-    height:46px;
+  background: #1f2937;
 
-    background:#1F2937;
+  border-radius: 14px;
 
-    border-radius:14px;
+  display: flex;
+  align-items: center;
 
-    display:flex;
-    align-items:center;
-
-    padding:0 18px;
-
+  padding: 0 18px;
 }
 
-.search-icon{
-
-    color:#9CA3AF;
-
+.search-icon {
+  color: #9ca3af;
 }
 
-.navbar-search input{
+.navbar-search input {
+  flex: 1;
 
-    flex:1;
+  background: transparent;
 
-    background:transparent;
+  border: none;
 
-    border:none;
+  outline: none;
 
-    outline:none;
+  color: white;
 
-    color:white;
+  margin-left: 12px;
 
-    font-size:15px;
-
-    margin-left:12px;
-
+  font-size: 15px;
 }
 
-.navbar-search input::placeholder{
-
-    color:#9CA3AF;
-
+.navbar-search input::placeholder {
+  color: #9ca3af;
 }
 
-.navbar-icons{
+/* Right Icons */
 
-    display:flex;
-    align-items:center;
-    gap:22px;
-    position:relative;
+.navbar-icons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 
+  position: relative;
 }
 
-.navbar-icons button{
+.navbar-icons button {
+  width: 46px;
+  height: 46px;
 
-    width:46px;
-    height:46px;
+  border-radius: 50%;
 
-    border:none;
+  border: none;
 
-    border-radius:50%;
+  background: #1f2937;
 
-    background:#1F2937;
+  color: white;
 
-    color:white;
+  cursor: pointer;
 
-    cursor:pointer;
+  font-size: 18px;
 
-    transition:.3s;
-
-    font-size:18px;
-
+  transition: .3s;
 }
 
-.navbar-icons button:hover{
-
-    background:#7C3AED;
-
+.navbar-icons button:hover {
+  background: #7c3aed;
 }
 
-.notification-btn{
+/* Notification */
 
-    position:relative;
-
+.notification-btn {
+  position: relative;
 }
 
-.notification-btn span{
+.notification-btn span {
+  position: absolute;
 
-    position:absolute;
+  top: -5px;
+  right: -3px;
 
-    top:-6px;
-    right:-4px;
+  width: 18px;
+  height: 18px;
 
-    width:20px;
-    height:20px;
+  border-radius: 50%;
 
-    border-radius:50%;
+  background: #ef4444;
 
-    background:#7C3AED;
+  color: white;
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    font-size:11px;
+  font-size: 11px;
 
-    color:white;
-
+  font-weight: 600;
 }
 
-.profile-avatar{
+/* Avatar */
 
-    width:45px;
-    height:45px;
+.profile-avatar {
+  width: 46px;
+  height: 46px;
 
-    border-radius:50%;
+  border-radius: 50%;
 
-    background:#7C3AED;
+  overflow: hidden;
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+  cursor: pointer;
 
-    color:white;
+  background: #7c3aed;
 
-    font-weight:bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    font-size:18px;
+  color: white;
 
-    cursor:pointer;
+  font-weight: bold;
 
+  font-size: 18px;
+
+  flex-shrink: 0;
 }
 
-/* ---------- Responsive ---------- */
+.navbar-profile-image {
+  width: 100%;
+  height: 100%;
 
-@media(max-width:992px){
+  object-fit: cover;
 
-.navbar{
-
-padding:0 20px;
-
+  display: block;
 }
 
-.navbar-search{
+/* Responsive */
 
-width:260px;
+@media (max-width: 992px) {
+  .navbar {
+    padding: 0 20px;
+  }
 
+  .navbar-search {
+    width: 320px;
+  }
 }
 
-}
+@media (max-width: 768px) {
+  .navbar-search {
+    display: none;
+  }
 
-@media(max-width:768px){
+  .navbar-logo h2 {
+    font-size: 28px;
+  }
 
-.navbar{
-
-height:65px;
-
-padding:0 15px;
-
-}
-
-.navbar-logo h2{
-
-font-size:24px;
-
-}
-
-.navbar-search{
-
-display:none;
-
-}
-
-.navbar-icons{
-
-gap:12px;
-
-}
-
-.navbar-icons button{
-
-width:40px;
-height:40px;
-
-}
-
-.profile-avatar{
-
-width:40px;
-height:40px;
-
-}
-
+  .navbar {
+    padding: 0 15px;
+  }
 }

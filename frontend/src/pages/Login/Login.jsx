@@ -1,13 +1,15 @@
 import "./Login.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock, FaEye } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
 import { loginUser } from "../../services/authService";
+import { AuthContext } from "../../context/AuthContext";
 
 function Login() {
   const navigate = useNavigate();
+  const { setUser } = useContext(AuthContext);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -28,24 +30,34 @@ function Login() {
 
     try {
       setLoading(true);
+      setError("");
 
       const response = await loginUser(formData);
 
       console.log(response.data);
 
+      // Save JWT Tokens
       localStorage.setItem("access_token", response.data.access);
-
       localStorage.setItem("refresh_token", response.data.refresh);
+
+      // Save User
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+
+      // Update Context
+      setUser(response.data.user);
+      alert("Login Successful 🎉");
+      console.log(response.data.user.profile_picture);
+      console.log(response.data.user);
 
       navigate("/home");
     } catch (error) {
       console.error(error);
-
       setError("Invalid email or password.");
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <div className="login-page">
       <div className="left-side">
@@ -85,6 +97,7 @@ function Login() {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="Enter your email"
+                  required
                 />
               </div>
             </div>
@@ -101,6 +114,7 @@ function Login() {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="Enter your password"
+                  required
                 />
 
                 <FaEye className="eye" />
@@ -116,9 +130,9 @@ function Login() {
               <a href="#">Forgot Password?</a>
             </div>
 
-              {error && <p className="error">{error}</p>}
+            {error && <p className="error">{error}</p>}
 
-            <button className="login-btn">
+            <button className="login-btn" disabled={loading}>
               {loading ? "Signing In..." : "Sign In"}
             </button>
           </form>

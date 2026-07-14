@@ -1,0 +1,160 @@
+.profile-header {
+  background: #1f2937;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+/* ================= Cover ================= */
+
+.profile-cover {
+  width: 100%;
+  height: 320px;
+  overflow: hidden;
+  background: #111827;
+}
+
+.profile-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* ================= Profile Section ================= */
+
+.profile-info {
+  display: flex;
+  align-items: flex-end;
+  gap: 30px;
+
+  margin-top: -80px;
+  padding: 0 40px 35px;
+}
+
+/* ================= Profile Image ================= */
+
+.profile-image {
+  width: 170px;
+  height: 170px;
+
+  border-radius: 50%;
+  overflow: hidden;
+
+  background: #fff;
+
+  border: 6px solid #1f2937;
+
+  flex-shrink: 0;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, .35);
+}
+
+.profile-image img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  display: block;
+}
+
+/* ================= Details ================= */
+
+.profile-details {
+  flex: 1;
+  padding-bottom: 10px;
+}
+
+.profile-details h2 {
+  color: #fff;
+  font-size: 34px;
+  margin-bottom: 5px;
+}
+
+.profile-details span {
+  color: #a78bfa;
+  font-size: 17px;
+}
+
+.profile-details p {
+  color: #9ca3af;
+  margin: 15px 0 22px;
+  line-height: 1.6;
+}
+
+.profile-details button {
+  border: none;
+  outline: none;
+
+  background: #7c3aed;
+  color: white;
+
+  padding: 12px 28px;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  transition: .3s;
+}
+
+.profile-details button:hover {
+  background: #6d28d9;
+}
+
+/* ================= Responsive ================= */
+
+@media (max-width:992px){
+
+.profile-cover{
+    height:250px;
+}
+
+.profile-image{
+    width:140px;
+    height:140px;
+}
+
+}
+
+@media (max-width:768px){
+
+.profile-cover{
+    height:180px;
+}
+
+.profile-info{
+
+    flex-direction:column;
+
+    align-items:center;
+
+    text-align:center;
+
+    margin-top:-60px;
+
+    padding:0 20px 30px;
+}
+
+.profile-image{
+
+    width:120px;
+    height:120px;
+}
+
+.profile-details{
+
+    width:100%;
+}
+
+.profile-details h2{
+
+    font-size:28px;
+}
+
+}

@@ -1,80 +1,97 @@
 import "./Sidebar.css";
+import { useContext } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+
+import { AuthContext } from "../../../context/AuthContext";
+import { logoutUser } from "../../../services/authService";
+import { getImageUrl } from "../../../utils/imageHelper";
 
 import {
-    FaHome,
-    FaUser,
-    FaComments,
-    FaBookmark,
-    FaBell,
-    FaCog,
-    FaSignOutAlt,
+  FaHome,
+  FaUser,
+  FaComments,
+  FaBookmark,
+  FaBell,
+  FaCog,
+  FaSignOutAlt,
 } from "react-icons/fa";
 
 function Sidebar() {
+  const navigate = useNavigate();
 
-    return (
+  const { user, setUser } = useContext(AuthContext);
+  const profileImage = getImageUrl(user?.profile_picture);
 
-        <aside className="sidebar">
+  const handleLogout = async () => {
+    try {
+      const refresh = localStorage.getItem("refresh_token");
 
-            <div className="profile-card">
+      if (refresh) {
+        await logoutUser(refresh);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+      localStorage.removeItem("user");
 
-                <img
-                    src="https://i.pravatar.cc/150?img=47"
-                    alt="profile"
-                />
+      setUser(null);
 
-                <h3>Saloni Singh</h3>
+      navigate("/login");
+    }
+  };
 
-                <span>View Profile</span>
+  return (
+    <aside className="sidebar">
+      <div className="profile-card">
+        <img src={profileImage} alt="profile" />
 
-            </div>
+        <h3>{user?.full_name || "User"}</h3>
 
-            <div className="sidebar-menu">
+        <NavLink to="/profile" className="view-profile">
+          View Profile
+        </NavLink>
+      </div>
 
-                <button className="active">
-                    <FaHome />
-                    Home
-                </button>
+      <div className="sidebar-menu">
+        <NavLink to="/home" end>
+          <FaHome />
+          <span>Home</span>
+        </NavLink>
 
-                <button>
-                    <FaUser />
-                    Profile
-                </button>
+        <NavLink to="/profile">
+          <FaUser />
+          <span>Profile</span>
+        </NavLink>
 
-                <button>
-                    <FaComments />
-                    Chat
-                </button>
+        <NavLink to="/chat">
+          <FaComments />
+          <span>Chat</span>
+        </NavLink>
 
-                <button>
-                    <FaBookmark />
-                    Saved
-                </button>
+        <NavLink to="/saved">
+          <FaBookmark />
+          <span>Saved</span>
+        </NavLink>
 
-                <button>
-                    <FaBell />
-                    Notifications
-                </button>
+        <NavLink to="/notifications">
+          <FaBell />
+          <span>Notifications</span>
+        </NavLink>
 
-                <button>
-                    <FaCog />
-                    Settings
-                </button>
+        <NavLink to="/settings">
+          <FaCog />
+          <span>Settings</span>
+        </NavLink>
+      </div>
 
-            </div>
-
-            <button className="logout-btn">
-
-                <FaSignOutAlt />
-
-                Logout
-
-            </button>
-
-        </aside>
-
-    );
-
+      <button className="logout-btn" onClick={handleLogout}>
+        <FaSignOutAlt />
+        Logout
+      </button>
+    </aside>
+  );
 }
 
 export default Sidebar;

@@ -1,0 +1,69 @@
+.profile-tabs{
+
+    display:flex;
+
+    gap:15px;
+
+    background:#1F2937;
+
+    padding:15px;
+
+    border-radius:16px;
+}
+
+.profile-tabs button{
+
+    flex:1;
+
+    border:none;
+
+    background:transparent;
+
+    color:#9CA3AF;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+    font-size:15px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.profile-tabs button:hover{
+
+    background:#374151;
+
+    color:white;
+}
+
+.profile-tabs button.active{
+
+    background:#7C3AED;
+
+    color:white;
+}
+
+@media(max-width:768px){
+
+.profile-tabs{
+
+    flex-wrap:wrap;
+}
+
+.profile-tabs button{
+
+    min-width:140px;
+}
+
+}
