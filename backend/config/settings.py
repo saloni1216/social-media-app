@@ -1,24 +1,22 @@
 from pathlib import Path
 from datetime import timedelta
 from django.urls import reverse_lazy
+from decouple import config, Csv
 import os
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-SECRET_KEY = 'django-insecure-ll_^#0%zogsb!n7le36me&$^^^e=+rxz$xg4c_=0ax(pz7fuay'
-
-DEBUG = True
-
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
-ALLOWED_HOSTS += ['localhost', '127.0.0.1']
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', cast=Csv())
 
 INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
