@@ -37,6 +37,7 @@ class RegisterrSerializer(serializers.ModelSerializer):
 
         return user
     
+
 class LoginSerializer(TokenObtainPairSerializer):
 
     email = serializers.EmailField(write_only=True)
@@ -74,6 +75,15 @@ class LoginSerializer(TokenObtainPairSerializer):
 
         refresh = self.get_token(user)
 
+        request = self.context.get("request")
+
+        profile_picture = None
+        if user.profile_picture:
+            if request:
+                profile_picture = request.build_absolute_uri(user.profile_picture.url)
+            else:
+                profile_picture = user.profile_picture.url
+
         return {
             "refresh": str(refresh),
             "access": str(refresh.access_token),
@@ -84,7 +94,7 @@ class LoginSerializer(TokenObtainPairSerializer):
                 "email": user.email,
                 "full_name": user.full_name,
                 "is_verified": user.is_verified,
-                "profile_picture": user.profile_picture.url if user.profile_picture else None,
+                "profile_picture": profile_picture,
             },
         }
     
