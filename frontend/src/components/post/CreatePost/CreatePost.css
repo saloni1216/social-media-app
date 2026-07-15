@@ -1,123 +1,206 @@
-.create-post{
-
-    background:#1F2937;
-
-    border-radius:18px;
-
-    padding:22px;
-
-    margin-bottom:25px;
-
+.create-post {
+  background: #1f2937;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 25px;
 }
 
-.create-post-header{
 
-    display:flex;
-
-    gap:15px;
-
+.create-post-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
 }
 
-.create-post-header img{
-
-    width:50px;
-
-    height:50px;
-
-    border-radius:50%;
-
+.create-post-header img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
 }
 
-.create-post-header textarea{
-
-    flex:1;
-
-    background:#111827;
-
-    border:none;
-
-    outline:none;
-
-    resize:none;
-
-    border-radius:14px;
-
-    color:white;
-
-    padding:15px;
-
-    min-height:90px;
-
-    font-size:15px;
-
+.create-post-header textarea {
+  flex: 1;
+  background: #111827;
+  border: none;
+  outline: none;
+  resize: none;
+  border-radius: 14px;
+  color: white;
+  padding: 15px;
+  min-height: 90px;
+  width: 100%;
+  font-size: 15px;
 }
 
-.create-post-header textarea::placeholder{
-
-    color:#9CA3AF;
-
+.create-post-header textarea::placeholder {
+  color: #9ca3af;
 }
 
-.create-post-footer{
 
-    display:flex;
-
-    justify-content:space-between;
-
-    margin-top:18px;
-
+.preview-image {
+  width: 140px;
+  height: 140px;
+  border-radius: 14px;
+  object-fit: cover;
+  border: 2px solid #374151;
+  margin-left: 15px;
 }
 
-.create-post-footer button{
 
-    display:flex;
-
-    align-items:center;
-
-    gap:8px;
-
-    background:#374151;
-
-    border:none;
-
-    color:white;
-
-    padding:10px 18px;
-
-    border-radius:10px;
-
-    cursor:pointer;
-
+.create-post-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
 }
 
-.post-btn{
 
-    background:#7C3AED !important;
-
+.create-post-footer .button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #374151;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  min-width: 120px;
+  font-size: 15px;
 }
 
-.post-btn:hover{
-
-    background:#8B5CF6 !important;
-
+.create-post-footer .button:hover {
+  background: #4b5563;
 }
 
-@media(max-width:768px){
-
-.create-post-footer{
-
-flex-wrap:wrap;
-
-gap:10px;
-
+.create-post-footer .button input {
+  display: none;
 }
 
-.create-post-footer button{
 
-flex:1;
-
-justify-content:center;
-
+.create-post-footer button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #374151;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  min-width: 120px;
+  font-size: 15px;
 }
 
+.create-post-footer button:hover {
+  background: #4b5563;
+}
+
+
+
+.post-btn {
+  background: #7c3aed;
+}
+
+.post-btn:hover {
+  background: #8b5cf6;
+}
+
+
+@media (max-width: 992px) {
+  .preview-image {
+    width: 110px;
+    height: 110px;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .create-post {
+    padding: 16px;
+  }
+
+  .create-post-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .create-post-header img {
+    width: 45px;
+    height: 45px;
+  }
+
+  .preview-image {
+    width: 100%;
+    height: 220px;
+    margin: 12px 0 0;
+    object-fit: cover;
+  }
+
+  .create-post-footer {
+    flex-wrap: wrap;
+  }
+
+  .create-post-footer .button,
+  .create-post-footer button {
+    flex: 1;
+
+    min-width: 100px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .create-post-footer {
+    flex-direction: column;
+  }
+
+  .create-post-footer .button,
+  .create-post-footer button {
+    width: 100%;
+  }
+}
+
+.selected-feeling {
+  color: #8b5cf6;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.feeling-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.feeling-list button {
+  border: none;
+  background: #374151;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.feeling-list button:hover {
+  background: #7c3aed;
+}
+
+@media (max-width: 768px) {
+  .feeling-list {
+    gap: 8px;
+  }
+
+  .feeling-list button {
+    font-size: 13px;
+    padding: 7px 12px;
+  }
 }

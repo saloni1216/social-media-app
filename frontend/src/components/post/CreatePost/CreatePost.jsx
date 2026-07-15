@@ -1,6 +1,6 @@
 import "./CreatePost.css";
 
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 import { getImageUrl } from "../../../utils/imageHelper";
 
@@ -11,18 +11,41 @@ import { createPost } from "../../../services/postService";
 function CreatePost({ onPostCreated }) {
   const { user } = useContext(AuthContext);
 
+  const textareaRef = useRef(null);
+
   const [caption, setCaption] = useState("");
   const [image, setImage] = useState(null);
   const [feeling, setFeeling] = useState("");
+  const [showFeelings, setShowFeelings] = useState(false);
+
+  const feelings = [
+    "😊 Happy",
+    "😍 Loved",
+    "🥳 Excited",
+    "😎 Cool",
+    "🤩 Amazing",
+    "😢 Sad",
+    "😴 Sleepy",
+    "🤒 Sick",
+    "😡 Angry",
+    "❤️ Blessed",
+  ];
 
   const handleImage = (e) => {
     setImage(e.target.files[0]);
   };
 
   const handleFeeling = () => {
-    const feel = prompt("How are you feeling?");
+    setShowFeelings(!showFeelings);
 
-    if (feel) setFeeling(feel);
+    textareaRef.current?.focus();
+  };
+
+  const selectFeeling = (item) => {
+    setFeeling(item);
+    setShowFeelings(false);
+
+    textareaRef.current?.focus();
   };
 
   const handlePost = async () => {
@@ -35,7 +58,7 @@ function CreatePost({ onPostCreated }) {
 
     formData.append(
       "caption",
-      `${caption}${feeling ? ` Feeling ${feeling}` : ""}`
+      feeling ? `${caption}\n\nFeeling ${feeling}` : caption,
     );
 
     if (image) {
@@ -48,6 +71,7 @@ function CreatePost({ onPostCreated }) {
       setCaption("");
       setImage(null);
       setFeeling("");
+      setShowFeelings(false);
 
       onPostCreated();
     } catch (err) {
@@ -58,18 +82,44 @@ function CreatePost({ onPostCreated }) {
   return (
     <div className="create-post">
       <div className="create-post-header">
-        <img
-          src={getImageUrl(user?.profile_picture)}
-          alt="profile"
-        />
+        <img src={getImageUrl(user?.profile_picture)} alt="profile" />
 
-        <textarea
-          value={caption}
-          onChange={(e) => setCaption(e.target.value)}
-          placeholder={`What's on your mind, ${
-            user?.full_name?.split(" ")[0] || "User"
-          }?`}
-        />
+        <div style={{ flex: 1 }}>
+          <textarea
+            ref={textareaRef}
+            value={caption}
+            onChange={(e) => setCaption(e.target.value)}
+            placeholder={`What's on your mind, ${
+              user?.full_name?.split(" ")[0] || "User"
+            }?`}
+          />
+
+          {feeling && (
+            <p
+              style={{
+                color: "#8B5CF6",
+                marginTop: "10px",
+                fontWeight: "600",
+              }}
+            >
+              {feeling}
+            </p>
+          )}
+
+          {showFeelings && (
+            <div className="feeling-list">
+              {feelings.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => selectFeeling(item)}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
 
         {image && (
           <img
@@ -84,23 +134,15 @@ function CreatePost({ onPostCreated }) {
         <label className="button">
           <FaImage />
           Photo
-          <input
-            hidden
-            type="file"
-            accept="image/*"
-            onChange={handleImage}
-          />
+          <input hidden type="file" accept="image/*" onChange={handleImage} />
         </label>
 
-        <button onClick={handleFeeling}>
+        <button type="button" onClick={handleFeeling}>
           <FaSmile />
           Feeling
         </button>
 
-        <button
-          className="post-btn"
-          onClick={handlePost}
-        >
+        <button className="post-btn" onClick={handlePost}>
           <FaPaperPlane />
           Post
         </button>
