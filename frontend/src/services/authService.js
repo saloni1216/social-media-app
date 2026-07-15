@@ -13,3 +13,15 @@ export const logoutUser = (refresh) => {
         refresh,
     });
 };
+
+export const refreshToken = (refresh) => {
+  return api.post(
+    "accounts/token/refresh/",
+    {
+      refresh,
+    },
+    {
+      skipAuthRefresh: true,
+    }
+  );
+};

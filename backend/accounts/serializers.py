@@ -100,6 +100,18 @@ class ProfileSerializer(serializers.ModelSerializer):
             "user_permissions",
         )
 
+class ChatUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomUser
+        fields = (
+            "id",
+            "full_name",
+            "username",
+            "profile_picture",
+            "is_verified",
+        )
+        
 class UpdateProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser

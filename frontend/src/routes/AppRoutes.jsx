@@ -5,6 +5,7 @@ import Register from "../pages/Register/Register";
 import Home from "../pages/Home/Home";
 import Profile from "../pages/Profile/Profile";
 import Settings from "../pages/Settings/Settings";
+import Chat from "../pages/Chat/Chat";
 
 function AppRoutes() {
   return (
@@ -17,6 +18,7 @@ function AppRoutes() {
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/chat" element={<Chat />} />
 
       </Routes>
     </BrowserRouter>

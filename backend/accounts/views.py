@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from .serializers import (RegisterrSerializer,LoginSerializer,ProfileSerializer,UpdateProfileSerializer, ChangePasswordSerializer, LogoutSerializer)
+from .serializers import (RegisterrSerializer,LoginSerializer,ProfileSerializer,UpdateProfileSerializer, ChangePasswordSerializer, LogoutSerializer, ChatUserSerializer,)
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 
@@ -27,6 +27,18 @@ class ProfileView(APIView):
     def get(self, request):
         serializer = ProfileSerializer(request.user)
         return Response(serializer.data)
+    
+class ChatUserListView(generics.ListAPIView):
+
+    serializer_class = ChatUserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return (
+            CustomUser.objects
+            .exclude(id=self.request.user.id)
+            .order_by("full_name")
+        )
 
 class UpdateProfileView(generics.UpdateAPIView):
     serializer_class = UpdateProfileSerializer

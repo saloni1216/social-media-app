@@ -1,7 +1,6 @@
 import "./Sidebar.css";
 import { useContext } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthContext";
 import { logoutUser } from "../../../services/authService";
 import { getImageUrl } from "../../../utils/imageHelper";
@@ -18,6 +17,7 @@ import {
 
 function Sidebar() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { user, setUser } = useContext(AuthContext);
   const profileImage = getImageUrl(user?.profile_picture);

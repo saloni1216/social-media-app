@@ -20,9 +20,7 @@ class StartConversationView(APIView):
 
         if not receiver_id:
             return Response(
-                {
-                    "error": "receiver_id is required"
-                },
+                {"error": "receiver_id is required"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -31,9 +29,7 @@ class StartConversationView(APIView):
 
         except User.DoesNotExist:
             return Response(
-                {
-                    "error": "User not found"
-                },
+                {"error": "User not found"},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
@@ -49,7 +45,12 @@ class StartConversationView(APIView):
                 participants.count() == 2
                 and receiver in participants
             ):
-                serializer = ConversationSerializer(conversation)
+                serializer = ConversationSerializer(
+                    conversation,
+                    context={
+                        "request": request
+                    }
+                )
 
                 return Response(serializer.data)
 
@@ -60,7 +61,12 @@ class StartConversationView(APIView):
             receiver,
         )
 
-        serializer = ConversationSerializer(conversation)
+        serializer = ConversationSerializer(
+            conversation,
+            context={
+                "request": request
+            }
+        )
 
         return Response(
             serializer.data,
