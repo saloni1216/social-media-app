@@ -3,6 +3,9 @@ from datetime import timedelta
 from django.urls import reverse_lazy
 from decouple import config, Csv
 import os
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -18,7 +21,16 @@ if RENDER_EXTERNAL_HOSTNAME:
 
 CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', cast=Csv())
 
+cloudinary.config(
+    cloud_name=config("CLOUDINARY_CLOUD_NAME"),
+    api_key=config("CLOUDINARY_API_KEY"),
+    api_secret=config("CLOUDINARY_API_SECRET"),
+    secure=True,
+)
+
 INSTALLED_APPS = [
+    "cloudinary_storage",
+    "cloudinary",
     "rest_framework_simplejwt.token_blacklist",
     "unfold",
     'django.contrib.admin',
@@ -120,10 +132,20 @@ USE_TZ = True
 
 
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / "static",]
-STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATIC_URL = 'static/'
+# STATICFILES_DIRS = [BASE_DIR / "static",]
+# STATIC_ROOT = BASE_DIR / "staticfiles"
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 
 AUTH_USER_MODEL = "accounts.CustomUser"
