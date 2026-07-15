@@ -76,8 +76,10 @@ function EditProfileModal({ onClose }) {
     }
 
     try {
+const API_URL = import.meta.env.VITE_API_URL;
+
       const response = await axios.patch(
-        "http://127.0.0.1:8000/api/accounts/update/",
+        `${API_URL}/api/accounts/update/`,
 
         data,
 
