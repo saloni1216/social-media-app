@@ -7,16 +7,28 @@ import cloudinary
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = False
+SECRET_KEY = config("SECRET_KEY")
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+# True for local development
+DEBUG = True
 
-RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+]
+
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
-CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', cast=Csv())
+CORS_ALLOWED_ORIGINS = config(
+    "CORS_ALLOWED_ORIGINS",
+    cast=Csv(),
+)
+
+# ===============================
+# Cloudinary
+# ===============================
 
 cloudinary.config(
     cloud_name=config("CLOUDINARY_CLOUD_NAME"),
@@ -26,35 +38,46 @@ cloudinary.config(
 )
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': config("CLOUDINARY_CLOUD_NAME"),
-    'API_KEY': config("CLOUDINARY_API_KEY"),
-    'API_SECRET': config("CLOUDINARY_API_SECRET"),
+    "CLOUD_NAME": config("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": config("CLOUDINARY_API_KEY"),
+    "API_SECRET": config("CLOUDINARY_API_SECRET"),
 }
+
+# ===============================
+# Applications
+# ===============================
 
 INSTALLED_APPS = [
     "cloudinary_storage",
     "cloudinary",
-    "rest_framework_simplejwt.token_blacklist",
-    "unfold",
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
 
-    'rest_framework',
-    'corsheaders',
+    "rest_framework",
+    "rest_framework_simplejwt.token_blacklist",
+
+    "corsheaders",
+
+    "unfold",
+
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
 
     # Local Apps
-    'accounts',
-    'posts',
+    "accounts",
+    "posts",
     "likes",
-    'comments',
-    'chat',
+    "comments",
+    "chat",
     "notifications.apps.NotificationsConfig",
     "dashboard",
 ]
+
+# ===============================
+# Middleware
+# ===============================
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -67,50 +90,89 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = "config.urls"
+
+# ===============================
+# Templates
+# ===============================
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        "DIRS": [BASE_DIR / "templates"],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'dashboard.context_processors.dashboard_stats',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [
+            BASE_DIR / "templates",
+        ],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "dashboard.context_processors.dashboard_stats",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
+WSGI_APPLICATION = "config.wsgi.application"
+
+# ===============================
+# Database
+# ===============================
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
+# ===============================
+# Password Validation
+# ===============================
+
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    },
 ]
 
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+# ===============================
+# Localization
+# ===============================
+
+LANGUAGE_CODE = "en-us"
+
+TIME_ZONE = "UTC"
+
 USE_I18N = True
+
 USE_TZ = True
 
+# ===============================
+# Static Files
+# ===============================
+
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
+
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+MEDIA_URL = "/media/"
+
+MEDIA_ROOT = BASE_DIR / "media"
 
 STORAGES = {
     "default": {
@@ -121,16 +183,25 @@ STORAGES = {
     },
 }
 
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
-DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+# ===============================
+# Custom User
+# ===============================
 
 AUTH_USER_MODEL = "accounts.CustomUser"
+
+# ===============================
+# REST Framework
+# ===============================
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
 }
+
+# ===============================
+# JWT
+# ===============================
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
@@ -139,8 +210,9 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True,
 }
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+# ===============================
+# Unfold
+# ===============================
 
 UNFOLD = {
     "SITE_TITLE": "Socialize Admin",
@@ -170,13 +242,35 @@ UNFOLD = {
             {
                 "title": "Dashboard",
                 "items": [
-                    {"title": "Users", "icon": "person", "link": reverse_lazy("admin:accounts_customuser_changelist")},
-                    {"title": "Posts", "icon": "photo", "link": reverse_lazy("admin:posts_postmodel_changelist")},
-                    {"title": "Likes", "icon": "favorite", "link": reverse_lazy("admin:likes_like_changelist")},
-                    {"title": "Comments", "icon": "chat", "link": reverse_lazy("admin:comments_comment_changelist")},
-                    {"title": "Notifications", "icon": "notifications", "link": reverse_lazy("admin:notifications_notification_changelist")},
+                    {
+                        "title": "Users",
+                        "icon": "person",
+                        "link": reverse_lazy("admin:accounts_customuser_changelist"),
+                    },
+                    {
+                        "title": "Posts",
+                        "icon": "photo",
+                        "link": reverse_lazy("admin:posts_postmodel_changelist"),
+                    },
+                    {
+                        "title": "Likes",
+                        "icon": "favorite",
+                        "link": reverse_lazy("admin:likes_like_changelist"),
+                    },
+                    {
+                        "title": "Comments",
+                        "icon": "chat",
+                        "link": reverse_lazy("admin:comments_comment_changelist"),
+                    },
+                    {
+                        "title": "Notifications",
+                        "icon": "notifications",
+                        "link": reverse_lazy("admin:notifications_notification_changelist"),
+                    },
                 ],
             },
         ],
     },
 }
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
