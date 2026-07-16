@@ -121,7 +121,9 @@ STORAGES = {
     },
 }
 
-DEFAULT_FILE_STORAGE = STORAGES["default"]["BACKEND"]
+# Cloudinary package compatibility
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 AUTH_USER_MODEL = "accounts.CustomUser"
 
