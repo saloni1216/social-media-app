@@ -162,6 +162,7 @@ USE_TZ = True
 # Static Files
 # ===============================
 
+
 STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
@@ -171,9 +172,9 @@ STATICFILES_DIRS = [
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/media/"
-
 MEDIA_ROOT = BASE_DIR / "media"
 
+# New Django storage API
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
@@ -182,6 +183,10 @@ STORAGES = {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
+
+# Keep these because cloudinary_storage still uses them internally
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
 # ===============================
 # Custom User
