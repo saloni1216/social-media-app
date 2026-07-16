@@ -121,7 +121,6 @@ STORAGES = {
     },
 }
 
-STATICFILES_STORAGE = STORAGES["staticfiles"]["BACKEND"]
 DEFAULT_FILE_STORAGE = STORAGES["default"]["BACKEND"]
 
 AUTH_USER_MODEL = "accounts.CustomUser"
