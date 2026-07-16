@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "cloudinary_storage",
     "cloudinary",
     "rest_framework_simplejwt.token_blacklist",
+    "unfold",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -122,7 +123,6 @@ STORAGES = {
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
-
 AUTH_USER_MODEL = "accounts.CustomUser"
 
 REST_FRAMEWORK = {
