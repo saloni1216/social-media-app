@@ -2,7 +2,7 @@ import "./EditProfileModal.css";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { getImageUrl } from "../../utils/imageHelper";
-import axios from "axios";
+import api from "../../api/api"; // ⚠️ ye path apne project ke hisaab se check/adjust kar lena
 
 function EditProfileModal({ onClose }) {
   const { user, setUser } = useContext(AuthContext);
@@ -17,99 +17,74 @@ function EditProfileModal({ onClose }) {
   const [coverFile, setCoverFile] = useState(null);
 
   const [profilePreview, setProfilePreview] = useState(user?.profile_picture);
-
   const [coverPreview, setCoverPreview] = useState(user?.cover_photo);
 
   // Profile Image Preview
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-
     if (!file) return;
 
     setProfileFile(file);
-
     setProfilePreview(URL.createObjectURL(file));
   };
 
   // Cover Image Preview
-
   const handleCoverChange = (e) => {
     const file = e.target.files[0];
-
     if (!file) return;
 
     setCoverFile(file);
-
     setCoverPreview(URL.createObjectURL(file));
   };
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-
       [e.target.name]: e.target.value,
     });
   };
 
   // SAVE PROFILE
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const data = new FormData();
-
     data.append("username", formData.username);
-
     data.append("full_name", formData.full_name);
-
-    data.append("username", formData.username);
-
     data.append("bio", formData.bio);
 
     if (profileFile) {
       data.append("profile_picture", profileFile);
     }
-
     if (coverFile) {
       data.append("cover_photo", coverFile);
     }
 
     try {
-const API_URL = import.meta.env.VITE_API_URL;
-
-      const response = await axios.patch(
-        `${API_URL}/accounts/update/`,
-
-        data,
-
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
+      // Shared `api` instance use kar rahe hain (interceptor token khud add karta hai)
+      // Isme leading slash NAHI lagani, warna baseURL ke trailing slash ke saath
+      // double slash (//) ban jayega aur Django 404 dega.
+      const response = await api.patch("accounts/update/", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
-      );
+      });
 
       console.log("Profile Updated:", response.data);
 
       // Update globally
-
       const updatedUser = {
         ...user,
         ...response.data,
       };
 
       setUser(updatedUser);
-
       localStorage.setItem("user", JSON.stringify(response.data));
 
       alert("Profile Updated Successfully");
-
       onClose();
     } catch (error) {
       console.log(error.response?.data);
-
       alert("Profile Update Failed");
     }
   };
