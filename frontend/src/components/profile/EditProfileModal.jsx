@@ -3,7 +3,6 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { getImageUrl } from "../../utils/imageHelper";
 import axios from "axios";
-import api from "../../api/api";
 
 function EditProfileModal({ onClose }) {
   const { user, setUser } = useContext(AuthContext);
