@@ -36,7 +36,46 @@ class RegisterrSerializer(serializers.ModelSerializer):
         )
 
         return user
-    
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    profile_picture = serializers.SerializerMethodField()
+    cover_photo = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CustomUser
+        fields = (
+            "id",
+            "username",
+            "email",
+            "full_name",
+            "bio",
+            "website",
+            "location",
+            "gender",
+            "date_of_birth",
+            "profile_picture",
+            "cover_photo",
+            "is_verified",
+            "is_private",
+        )
+
+    def get_profile_picture(self, obj):
+        request = self.context.get("request")
+        if obj.profile_picture:
+            if request:
+                return request.build_absolute_uri(obj.profile_picture.url)
+            return obj.profile_picture.url
+        return None
+
+    def get_cover_photo(self, obj):
+        request = self.context.get("request")
+        if obj.cover_photo:
+            if request:
+                return request.build_absolute_uri(obj.cover_photo.url)
+            return obj.cover_photo.url
+        return None
+
 
 class LoginSerializer(TokenObtainPairSerializer):
 
@@ -61,12 +100,12 @@ class LoginSerializer(TokenObtainPairSerializer):
         password = attrs.get("password")
 
         try:
-            user = CustomUser.objects.get(email=email)
+            db_user = CustomUser.objects.get(email=email)
         except CustomUser.DoesNotExist:
             raise serializers.ValidationError("Invalid email or password.")
 
         user = authenticate(
-            username=user.username,
+            username=db_user.username,
             password=password,
         )
 
@@ -77,38 +116,19 @@ class LoginSerializer(TokenObtainPairSerializer):
 
         request = self.context.get("request")
 
-        profile_picture = None
-        if user.profile_picture:
-            if request:
-                profile_picture = request.build_absolute_uri(user.profile_picture.url)
-            else:
-                profile_picture = user.profile_picture.url
+        # Return complete profile
+        profile_data = ProfileSerializer(
+            user,
+            context={"request": request},
+        ).data
 
         return {
             "refresh": str(refresh),
             "access": str(refresh.access_token),
             "message": "Login Successful",
-            "user": {
-                "id": user.id,
-                "username": user.username,
-                "email": user.email,
-                "full_name": user.full_name,
-                "is_verified": user.is_verified,
-                "profile_picture": profile_picture,
-            },
+            "user": profile_data,
         }
-    
 
-class ProfileSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = CustomUser
-        exclude = (
-            "username",
-            "password",
-            "groups",
-            "user_permissions",
-        )
 
 class ChatUserSerializer(serializers.ModelSerializer):
 
@@ -121,8 +141,10 @@ class ChatUserSerializer(serializers.ModelSerializer):
             "profile_picture",
             "is_verified",
         )
-        
+
+
 class UpdateProfileSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = CustomUser
         fields = (
@@ -138,12 +160,22 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
             "is_private",
         )
 
+
 class ChangePasswordSerializer(serializers.Serializer):
-    old_password = serializers.CharField(write_only=True,  style={"input_type": "password"} )
-    new_password = serializers.CharField(write_only=True,  style={"input_type": "password"})
+    old_password = serializers.CharField(
+        write_only=True,
+        style={"input_type": "password"},
+    )
+
+    new_password = serializers.CharField(
+        write_only=True,
+        style={"input_type": "password"},
+    )
+
 
 class LogoutSerializer(serializers.Serializer):
     refresh = serializers.CharField()
+
     def save(self):
         token = RefreshToken(self.validated_data["refresh"])
         token.blacklist()
