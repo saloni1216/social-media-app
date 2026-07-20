@@ -120,8 +120,15 @@
   }
 }
 
-chat-section-title{
-  color: white;
-  padding: 10px 20px;
-  margin: 0;
+.chat-section-title {
+  color: #cbd5e1;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  margin: 18px 15px 10px;
+  padding-bottom: 6px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
