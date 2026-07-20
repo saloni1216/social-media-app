@@ -235,19 +235,14 @@ STATIC_URL = "/static/"
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-
 STATICFILES_DIRS = [
-
     BASE_DIR / "static",
-
 ]
 
 
-# IMPORTANT FIX FOR CLOUDINARY ERROR
 STATICFILES_STORAGE = (
-    "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    "whitenoise.storage.CompressedStaticFilesStorage"
 )
-
 
 
 MEDIA_URL = "/media/"
@@ -256,27 +251,20 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 
 
-# Django 5 storage system
-
 STORAGES = {
 
     "default": {
-
         "BACKEND":
         "cloudinary_storage.storage.MediaCloudinaryStorage",
-
     },
 
 
     "staticfiles": {
-
         "BACKEND":
-        "whitenoise.storage.CompressedManifestStaticFilesStorage",
-
+        "whitenoise.storage.CompressedStaticFilesStorage",
     },
 
 }
-
 
 
 DEFAULT_FILE_STORAGE = (
