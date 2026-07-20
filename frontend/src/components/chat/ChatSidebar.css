@@ -119,3 +119,9 @@
     width: 100%;
   }
 }
+
+chat-section-title{
+  color: white;
+  padding: 10px 20px;
+  margin: 0;
+}
