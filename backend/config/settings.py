@@ -65,7 +65,6 @@ CLOUDINARY_STORAGE = {
 INSTALLED_APPS = [
 
     # Cloudinary
-    "cloudinary_storage",
     "cloudinary",
 
 
@@ -73,7 +72,11 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
+    
+
     "unfold",
+    "unfold.contrib.filters",
+    "unfold.contrib.forms",
 
 
     # Django
@@ -229,8 +232,6 @@ USE_TZ = True
 # ===============================
 # Static & Media
 # ===============================
-
-
 STATIC_URL = "/static/"
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -239,10 +240,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-
-STATICFILES_STORAGE = (
-    "whitenoise.storage.CompressedStaticFilesStorage"
-)
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
 
 MEDIA_URL = "/media/"
@@ -250,29 +248,14 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 
-
 STORAGES = {
-
     "default": {
-        "BACKEND":
-        "cloudinary_storage.storage.MediaCloudinaryStorage",
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
-
-
     "staticfiles": {
-        "BACKEND":
-        "whitenoise.storage.CompressedStaticFilesStorage",
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
-
 }
-
-
-DEFAULT_FILE_STORAGE = (
-    "cloudinary_storage.storage.MediaCloudinaryStorage"
-)
-
-
-
 # ===============================
 # Custom User
 # ===============================
