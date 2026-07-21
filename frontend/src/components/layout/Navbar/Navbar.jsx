@@ -57,45 +57,50 @@ function Navbar() {
         <input type="text" placeholder="Search people, posts..." />
       </div>
 
-      {/* Right Side */}
+     {/* Right Side */}
 
-      <div className="navbar-icons">
-        <button>
-          <FaHome />
-        </button>
+<div className="navbar-icons">
 
-        <button>
-          <FaComments />
-        </button>
+  <button onClick={() => navigate("/home")}>
+    <FaHome />
+  </button>
 
-        <button className="notification-btn">
-          <FaBell />
-          <span>3</span>
-        </button>
+  <button onClick={() => navigate("/chat")}>
+    <FaComments />
+  </button>
 
-        <div
-          className="profile-avatar"
-          onClick={() => setShowDropdown(!showDropdown)}
-        >
-          {profileImage ? (
-            <img
-              src={profileImage}
-              alt="Profile"
-              className="navbar-profile-image"
-            />
-          ) : (
-            <span>
-              {currentUser?.full_name?.charAt(0).toUpperCase() ||
-                currentUser?.username?.charAt(0).toUpperCase() ||
-                "S"}
-            </span>
-          )}
-        </div>
+  <button
+    className="notification-btn"
+    onClick={() => navigate("/notifications")}
+  >
+    <FaBell />
+    <span>3</span>
+  </button>
 
-        {showDropdown && (
-          <ProfileDropdown user={currentUser} onLogout={handleLogout} />
-        )}
-      </div>
+  <div
+    className="profile-avatar"
+    onClick={() => setShowDropdown(!showDropdown)}
+  >
+    {profileImage ? (
+      <img
+        src={profileImage}
+        alt="Profile"
+        className="navbar-profile-image"
+      />
+    ) : (
+      <span>
+        {currentUser?.full_name?.charAt(0).toUpperCase() ||
+          currentUser?.username?.charAt(0).toUpperCase() ||
+          "S"}
+      </span>
+    )}
+  </div>
+
+  {showDropdown && (
+    <ProfileDropdown user={currentUser} onLogout={handleLogout} />
+  )}
+
+</div>
     </nav>
   );
 }

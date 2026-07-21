@@ -21,6 +21,8 @@
 }
 
 
+/* User Header */
+
 .dropdown-header{
 
     display:flex;
@@ -46,6 +48,8 @@
 
     border-radius:50%;
 
+    object-fit:cover;
+
 }
 
 
@@ -53,7 +57,9 @@
 
     color:white;
 
-    margin-bottom:3px;
+    margin:0 0 3px 0;
+
+    font-size:16px;
 
 }
 
@@ -67,7 +73,9 @@
 }
 
 
-.profile-dropdown button{
+/* Profile + Settings + Logout Common */
+
+.dropdown-item{
 
     width:100%;
 
@@ -91,12 +99,25 @@
 
     font-size:15px;
 
+    text-decoration:none;
+
+    box-sizing:border-box;
+
 }
 
 
-.profile-dropdown button:hover{
+.dropdown-item:hover{
 
     background:#374151;
+
+}
+
+
+/* Logout */
+
+.logout{
+
+    color:#F87171;
 
 }
 
@@ -104,6 +125,8 @@
 .logout:hover{
 
     background:#DC2626 !important;
+
+    color:white;
 
 }
 
@@ -132,7 +155,7 @@
     }
 
 
-    .profile-dropdown button{
+    .dropdown-item{
 
         padding:12px;
 
@@ -196,7 +219,7 @@
     }
 
 
-    .profile-dropdown button{
+    .dropdown-item{
 
         gap:10px;
 
