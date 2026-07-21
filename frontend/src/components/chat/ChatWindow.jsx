@@ -10,6 +10,7 @@ import { connectSocket, getSocket } from "../../services/socket";
 function ChatWindow({ conversation }) {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
 
   const bottomRef = useRef(null);
 
@@ -22,7 +23,7 @@ function ChatWindow({ conversation }) {
   }, [conversation]);
 
   // Connect websocket when conversation changes
-useEffect(() => {
+  useEffect(() => {
     if (!conversation) return;
 
     console.log("Conversation", conversation);
@@ -31,33 +32,38 @@ useEffect(() => {
     const socket = connectSocket(conversation.id);
 
     socket.onopen = () => {
-        console.log("✅ WebSocket Connected");
+      console.log("✅ WebSocket Connected");
     };
 
     socket.onmessage = (event) => {
-        console.log("Received:", event.data);
-
-        const data = JSON.parse(event.data);
-
-        if (data.message) {
-            setMessages((prev) => [...prev, data.message]);
-        } else {
-            setMessages((prev) => [...prev, data]);
+      const data = JSON.parse(event.data);
+      console.log("Received:", data);
+      // Typing event
+      if (data.type === "typing") {
+        if (data.username !== currentUser.username) {
+          setIsTyping(data.typing);
         }
+
+        return;
+      }
+
+      // New message
+      setMessages((prev) => [...prev, data]);
     };
 
     socket.onclose = () => {
-        console.log("❌ WebSocket Disconnected");
+      console.log("❌ WebSocket Disconnected");
     };
 
     socket.onerror = (error) => {
-        console.log("Socket Error:", error);
+      console.log("Socket Error:", error);
     };
 
     return () => {
-        socket.close();
+      socket.close();
     };
-}, [conversation]);
+  }, [conversation]);
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({
       behavior: "smooth",
@@ -74,31 +80,35 @@ useEffect(() => {
     }
   };
 
- const handleSend = () => {
-  if (!text.trim()) return;
+  const handleSend = () => {
+    if (!text.trim()) return;
 
-  console.log("Sending:", text);
+    const socket = getSocket();
 
-  const socket = getSocket();
+    console.log("Sending:", text);
+    console.log("Socket:", socket);
+    console.log("Ready State:", socket?.readyState);
 
-  console.log("Socket:", socket);
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.send(
+        JSON.stringify({
+          text: text,
+        }),
+      );
 
-  console.log("Ready State:", socket.readyState);
+      // stop typing indicator
+      socket.send(
+        JSON.stringify({
+          type: "typing",
+          typing: false,
+        }),
+      );
 
-  if (socket.readyState === WebSocket.OPEN) {
-    socket.send(
-      JSON.stringify({
-        text: text,
-      })
-    );
-
-    console.log("Message Sent");
-
-    setText("");
-  } else {
-    console.log("Socket not open");
-  }
-};
+      setText("");
+    } else {
+      console.log("❌ Socket not connected");
+    }
+  };
 
   if (!conversation) {
     return (
@@ -116,10 +126,14 @@ useEffect(() => {
           alt=""
           className="chat-header-avatar"
         />
-
         <div>
           <h3>{conversation.other_user.full_name}</h3>
-          <span>@{conversation.other_user.username}</span>
+
+          {isTyping ? (
+            <span className="typing-text">Typing...</span>
+          ) : (
+            <span>@{conversation.other_user.username}</span>
+          )}
         </div>
       </div>
 
@@ -159,13 +173,20 @@ useEffect(() => {
       <div className="chat-input">
         <input
           value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleSend();
+          onChange={(e) => {
+            setText(e.target.value);
+
+            const socket = getSocket();
+
+            if (socket && socket.readyState === WebSocket.OPEN) {
+              socket.send(
+                JSON.stringify({
+                  type: "typing",
+                  typing: true,
+                }),
+              );
             }
           }}
-          placeholder="Type a message..."
         />
 
         <button onClick={handleSend}>Send</button>
