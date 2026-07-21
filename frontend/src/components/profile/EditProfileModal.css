@@ -13,6 +13,7 @@
     z-index:9999;
 }
 
+
 .edit-modal{
 
     width:650px;
@@ -31,14 +32,17 @@
     scrollbar-width:thin;
 }
 
+
 .edit-modal::-webkit-scrollbar{
     width:7px;
 }
+
 
 .edit-modal::-webkit-scrollbar-thumb{
     background:#7C3AED;
     border-radius:20px;
 }
+
 
 .edit-modal h2{
 
@@ -48,6 +52,7 @@
 
     margin-bottom:30px;
 }
+
 
 /* ---------- Profile Image ---------- */
 
@@ -61,6 +66,7 @@
 
     margin-bottom:25px;
 }
+
 
 .preview-image{
 
@@ -77,9 +83,11 @@
     margin-bottom:15px;
 }
 
+
 .profile-upload input{
     color:white;
 }
+
 
 /* ---------- Cover ---------- */
 
@@ -94,6 +102,7 @@
     font-weight:600;
 }
 
+
 .cover-upload{
 
     display:flex;
@@ -104,6 +113,7 @@
 
     margin-bottom:25px;
 }
+
 
 .cover-preview{
 
@@ -122,9 +132,11 @@
     display:block;
 }
 
+
 .cover-upload input{
     color:white;
 }
+
 
 /* ---------- Inputs ---------- */
 
@@ -136,6 +148,7 @@
 
     color:white;
 }
+
 
 .edit-modal input,
 .edit-modal textarea{
@@ -155,10 +168,12 @@
     border-radius:12px;
 }
 
+
 .edit-modal textarea{
 
     resize:none;
 }
+
 
 /* ---------- Buttons ---------- */
 
@@ -172,6 +187,7 @@
 
     margin-top:30px;
 }
+
 
 .cancel-btn,
 .save-btn{
@@ -187,12 +203,14 @@
     font-size:15px;
 }
 
+
 .cancel-btn{
 
     background:#374151;
 
     color:white;
 }
+
 
 .save-btn{
 
@@ -201,14 +219,18 @@
     color:white;
 }
 
+
 .save-btn:hover{
 
     background:#6D28D9;
 }
 
+
+
 /* ========================= */
 /* Responsive */
 /* ========================= */
+
 
 @media(max-width:768px){
 
@@ -221,21 +243,25 @@
     padding:20px;
 }
 
+
 .preview-image{
 
     width:110px;
     height:110px;
 }
 
+
 .cover-preview{
 
     height:160px;
 }
 
+
 .modal-buttons{
 
     flex-direction:column;
 }
+
 
 .modal-buttons button{
 
@@ -244,22 +270,69 @@
 
 }
 
+
+
+/* Small Mobile */
+
 @media(max-width:480px){
+
+.edit-modal-overlay{
+
+    padding:10px;
+}
+
 
 .edit-modal{
 
     padding:15px;
+
+    border-radius:14px;
 }
+
+
+.edit-modal h2{
+
+    font-size:20px;
+
+    margin-bottom:20px;
+}
+
+
+.edit-modal input,
+.edit-modal textarea{
+
+    padding:12px;
+
+    font-size:14px;
+}
+
 
 .cover-preview{
 
     height:130px;
 }
 
+
 .preview-image{
 
     width:90px;
     height:90px;
+}
+
+
+.modal-buttons{
+
+    gap:10px;
+
+}
+
+
+.cancel-btn,
+.save-btn{
+
+    padding:12px;
+
+    font-size:14px;
 }
 
 }

@@ -16,6 +16,7 @@
   padding: 0 35px;
 }
 
+
 /* Logo */
 
 .navbar-logo h2 {
@@ -23,6 +24,7 @@
   font-size: 36px;
   font-weight: 700;
 }
+
 
 /* Search */
 
@@ -64,6 +66,7 @@
   color: #9ca3af;
 }
 
+
 /* Right Icons */
 
 .navbar-icons {
@@ -97,6 +100,7 @@
   background: #7c3aed;
 }
 
+
 /* Notification */
 
 .notification-btn {
@@ -126,6 +130,7 @@
 
   font-weight: 600;
 }
+
 
 /* Avatar */
 
@@ -163,9 +168,11 @@
   display: block;
 }
 
-/* Responsive */
+
+/* Tablet */
 
 @media (max-width: 992px) {
+
   .navbar {
     padding: 0 20px;
   }
@@ -173,9 +180,14 @@
   .navbar-search {
     width: 320px;
   }
+
 }
 
+
+/* Mobile */
+
 @media (max-width: 768px) {
+
   .navbar-search {
     display: none;
   }
@@ -187,4 +199,43 @@
   .navbar {
     padding: 0 15px;
   }
+
+}
+
+
+/* Small Mobile */
+
+@media (max-width: 480px) {
+
+  .navbar {
+    height: 65px;
+    padding: 0 10px;
+  }
+
+  .navbar-logo h2 {
+    font-size: 22px;
+  }
+
+  .navbar-icons {
+    gap: 8px;
+  }
+
+  .navbar-icons button {
+    width: 38px;
+    height: 38px;
+    font-size: 15px;
+  }
+
+  .profile-avatar {
+    width: 38px;
+    height: 38px;
+    font-size: 15px;
+  }
+
+  .notification-btn span {
+    width: 15px;
+    height: 15px;
+    font-size: 9px;
+  }
+
 }

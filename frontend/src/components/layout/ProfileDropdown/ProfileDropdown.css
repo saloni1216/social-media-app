@@ -20,6 +20,7 @@
 
 }
 
+
 .dropdown-header{
 
     display:flex;
@@ -36,6 +37,7 @@
 
 }
 
+
 .dropdown-header img{
 
     width:50px;
@@ -46,6 +48,7 @@
 
 }
 
+
 .dropdown-header h4{
 
     color:white;
@@ -54,6 +57,7 @@
 
 }
 
+
 .dropdown-header span{
 
     color:#9CA3AF;
@@ -61,6 +65,7 @@
     font-size:13px;
 
 }
+
 
 .profile-dropdown button{
 
@@ -88,14 +93,117 @@
 
 }
 
+
 .profile-dropdown button:hover{
 
     background:#374151;
 
 }
 
+
 .logout:hover{
 
     background:#DC2626 !important;
+
+}
+
+
+/* Tablet Responsive */
+
+@media (max-width:768px){
+
+    .profile-dropdown{
+
+        right:15px;
+
+        width:230px;
+
+        padding:15px;
+
+    }
+
+
+    .dropdown-header img{
+
+        width:45px;
+
+        height:45px;
+
+    }
+
+
+    .profile-dropdown button{
+
+        padding:12px;
+
+        font-size:14px;
+
+    }
+
+}
+
+
+/* Mobile Responsive */
+
+@media (max-width:480px){
+
+    .profile-dropdown{
+
+        top:60px;
+
+        right:10px;
+
+        width:calc(100% - 20px);
+
+        max-width:260px;
+
+        border-radius:12px;
+
+        padding:14px;
+
+    }
+
+
+    .dropdown-header{
+
+        gap:10px;
+
+        padding-bottom:12px;
+
+    }
+
+
+    .dropdown-header img{
+
+        width:40px;
+
+        height:40px;
+
+    }
+
+
+    .dropdown-header h4{
+
+        font-size:14px;
+
+    }
+
+
+    .dropdown-header span{
+
+        font-size:12px;
+
+    }
+
+
+    .profile-dropdown button{
+
+        gap:10px;
+
+        padding:11px;
+
+        font-size:13px;
+
+    }
 
 }

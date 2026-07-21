@@ -103,7 +103,6 @@
 }
 
 
-
 .post-btn {
   background: #7c3aed;
 }
@@ -113,28 +112,43 @@
 }
 
 
+
 @media (max-width: 992px) {
+
   .preview-image {
     width: 110px;
     height: 110px;
   }
+
 }
 
 
+
 @media (max-width: 768px) {
+
   .create-post {
     padding: 16px;
+    border-radius: 14px;
   }
+
 
   .create-post-header {
     flex-direction: column;
     align-items: stretch;
   }
 
+
   .create-post-header img {
     width: 45px;
     height: 45px;
   }
+
+
+  .create-post-header textarea {
+    font-size: 14px;
+    min-height: 80px;
+  }
+
 
   .preview-image {
     width: 100%;
@@ -143,29 +157,70 @@
     object-fit: cover;
   }
 
+
   .create-post-footer {
     flex-wrap: wrap;
   }
 
+
   .create-post-footer .button,
   .create-post-footer button {
-    flex: 1;
 
+    flex: 1;
     min-width: 100px;
+
   }
+
 }
 
 
+
 @media (max-width: 480px) {
+
+  .create-post {
+    padding: 12px;
+    margin-bottom: 15px;
+  }
+
+
+  .create-post-header {
+    gap: 10px;
+  }
+
+
+  .create-post-header img {
+    width: 40px;
+    height: 40px;
+  }
+
+
+  .create-post-header textarea {
+    padding: 12px;
+    font-size: 13px;
+    min-height: 70px;
+  }
+
+
+  .preview-image {
+    height: 180px;
+  }
+
+
   .create-post-footer {
     flex-direction: column;
+    gap: 10px;
   }
+
 
   .create-post-footer .button,
   .create-post-footer button {
     width: 100%;
+    padding: 10px;
   }
+
 }
+
+
 
 .selected-feeling {
   color: #8b5cf6;
@@ -173,12 +228,14 @@
   font-weight: 600;
 }
 
+
 .feeling-list {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 12px;
 }
+
 
 .feeling-list button {
   border: none;
@@ -190,17 +247,44 @@
   transition: 0.3s;
 }
 
+
 .feeling-list button:hover {
   background: #7c3aed;
 }
 
+
+
 @media (max-width: 768px) {
+
   .feeling-list {
     gap: 8px;
   }
+
 
   .feeling-list button {
     font-size: 13px;
     padding: 7px 12px;
   }
+
+}
+
+
+
+@media (max-width: 480px) {
+
+  .selected-feeling {
+    font-size: 14px;
+  }
+
+
+  .feeling-list {
+    gap: 6px;
+  }
+
+
+  .feeling-list button {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
 }

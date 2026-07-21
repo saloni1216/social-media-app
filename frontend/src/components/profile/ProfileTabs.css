@@ -11,6 +11,7 @@
     border-radius:16px;
 }
 
+
 .profile-tabs button{
 
     flex:1;
@@ -40,12 +41,14 @@
     transition:.3s;
 }
 
+
 .profile-tabs button:hover{
 
     background:#374151;
 
     color:white;
 }
+
 
 .profile-tabs button.active{
 
@@ -54,16 +57,60 @@
     color:white;
 }
 
+
+
+/* Tablet / Mobile */
+
 @media(max-width:768px){
 
 .profile-tabs{
 
     flex-wrap:wrap;
+
+    gap:10px;
+
+    padding:12px;
+
 }
+
 
 .profile-tabs button{
 
     min-width:140px;
+
+    padding:12px;
+
+    font-size:14px;
+
+}
+
+}
+
+
+
+/* Small Mobile */
+
+@media(max-width:480px){
+
+.profile-tabs{
+
+    gap:8px;
+
+    padding:10px;
+
+    border-radius:12px;
+
+}
+
+
+.profile-tabs button{
+
+    min-width:100%;
+
+    padding:11px;
+
+    font-size:13px;
+
 }
 
 }

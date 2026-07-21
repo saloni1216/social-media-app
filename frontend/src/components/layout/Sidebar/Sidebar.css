@@ -9,6 +9,7 @@
   height: fit-content;
 }
 
+
 /* ================= Profile Card ================= */
 
 .profile-card {
@@ -38,6 +39,7 @@
 .view-profile:hover {
   color: white;
 }
+
 
 /* ================= Menu ================= */
 
@@ -76,6 +78,7 @@
   color: white;
 }
 
+
 /* ================= Logout ================= */
 
 .logout-btn {
@@ -105,10 +108,56 @@
   background: #ef4444;
 }
 
+
 /* ================= Responsive ================= */
 
 @media (max-width: 992px) {
+
   .sidebar {
     display: none;
   }
+
+}
+
+
+/* ================= Mobile ================= */
+
+@media (max-width: 480px) {
+
+  .sidebar {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    gap: 15px;
+  }
+
+
+  .profile-card img {
+    width: 70px;
+    height: 70px;
+  }
+
+
+  .profile-card h3 {
+    font-size: 20px;
+    margin-top: 10px;
+  }
+
+
+  .sidebar-menu {
+    gap: 8px;
+  }
+
+
+  .sidebar-menu a {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+
+
+  .logout-btn {
+    padding: 12px;
+    font-size: 14px;
+  }
+
 }

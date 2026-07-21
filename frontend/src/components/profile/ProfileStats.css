@@ -4,6 +4,7 @@
     gap:20px;
 }
 
+
 .stat-card{
 
     flex:1;
@@ -21,12 +22,14 @@
     cursor:pointer;
 }
 
+
 .stat-card:hover{
 
     transform:translateY(-4px);
 
     background:#273244;
 }
+
 
 .stat-card h3{
 
@@ -37,6 +40,7 @@
     margin-bottom:8px;
 }
 
+
 .stat-card span{
 
     color:#9CA3AF;
@@ -44,11 +48,71 @@
     font-size:15px;
 }
 
+
+
+/* Tablet */
+
 @media(max-width:768px){
 
 .profile-stats{
 
     flex-direction:column;
+
+    gap:15px;
+
+}
+
+
+.stat-card{
+
+    padding:18px;
+
+}
+
+
+.stat-card h3{
+
+    font-size:24px;
+
+}
+
+}
+
+
+
+/* Small Mobile */
+
+@media(max-width:480px){
+
+.profile-stats{
+
+    gap:12px;
+
+}
+
+
+.stat-card{
+
+    border-radius:12px;
+
+    padding:15px;
+
+}
+
+
+.stat-card h3{
+
+    font-size:22px;
+
+    margin-bottom:6px;
+
+}
+
+
+.stat-card span{
+
+    font-size:13px;
+
 }
 
 }
