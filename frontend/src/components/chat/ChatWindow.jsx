@@ -81,6 +81,8 @@ function ChatWindow({ conversation }) {
   };
 
   const handleSend = () => {
+      alert("Send button clicked");
+      
     if (!text.trim()) return;
 
     const socket = getSocket();

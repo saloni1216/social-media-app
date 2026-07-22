@@ -8,7 +8,7 @@ export const connectSocket = (conversationId) => {
     socket.close();
   }
 
-  messageQueue = []; // naya connection start hone par purani queue clear karo
+  messageQueue = []; 
 
   const token = localStorage.getItem("access_token");
 
@@ -22,8 +22,6 @@ export const connectSocket = (conversationId) => {
 
   socket.onopen = () => {
     console.log("✅ WebSocket Connected");
-    // jo messages connection open hone se pehle bhejne ki koshish hui thi,
-    // unhe ab flush karo
     messageQueue.forEach((msg) => socket.send(msg));
     messageQueue = [];
   };
