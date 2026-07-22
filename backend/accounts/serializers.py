@@ -139,6 +139,8 @@ class ChatUserSerializer(serializers.ModelSerializer):
             "full_name",
             "username",
             "profile_picture",
+            "is_online",
+            "last_seen",
             "is_verified",
         )
 

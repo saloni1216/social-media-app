@@ -31,6 +31,12 @@ class CustomUser(AbstractUser):
         blank=True
     )
 
+    is_online = models.BooleanField(default=False)
+    last_seen = models.DateTimeField(
+        null=True,
+        blank=True,
+        )
+
     date_of_birth = models.DateField(blank=True, null=True)
 
     is_verified = models.BooleanField(default=False)

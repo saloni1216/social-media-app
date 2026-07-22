@@ -11,9 +11,11 @@ function ChatWindow({ conversation }) {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-
+  const [userStatus, setUserStatus] = useState({
+    is_online: false,
+    last_seen: null,
+  });
   const bottomRef = useRef(null);
-
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
@@ -21,6 +23,15 @@ function ChatWindow({ conversation }) {
 
     loadMessages();
   }, [conversation]);
+
+  useEffect(() => {
+  if (!conversation) return;
+
+  setUserStatus({
+    is_online: conversation.other_user.is_online,
+    last_seen: conversation.other_user.last_seen,
+  });
+}, [conversation]);
 
   // Connect websocket when conversation changes
   useEffect(() => {
@@ -42,6 +53,16 @@ function ChatWindow({ conversation }) {
       if (data.type === "typing") {
         if (data.username !== currentUser.username) {
           setIsTyping(data.typing);
+        }
+        return;
+      }
+
+      if (data.type === "status") {
+        if (data.username === conversation.other_user.username) {
+          setUserStatus({
+            is_online: data.is_online,
+            last_seen: data.last_seen,
+          });
         }
 
         return;
@@ -81,8 +102,8 @@ function ChatWindow({ conversation }) {
   };
 
   const handleSend = () => {
-      alert("Send button clicked");
-      
+    alert("Send button clicked");
+
     if (!text.trim()) return;
 
     const socket = getSocket();
@@ -128,13 +149,24 @@ function ChatWindow({ conversation }) {
           alt=""
           className="chat-header-avatar"
         />
+
         <div>
           <h3>{conversation.other_user.full_name}</h3>
 
           {isTyping ? (
             <span className="typing-text">Typing...</span>
+          ) : userStatus.is_online ? (
+            <span className="online-text">🟢 Online</span>
           ) : (
-            <span>@{conversation.other_user.username}</span>
+            <span className="offline-text">
+              Last seen{" "}
+              {userStatus.last_seen
+                ? new Date(userStatus.last_seen).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                : "Recently"}
+            </span>
           )}
         </div>
       </div>
@@ -174,7 +206,8 @@ function ChatWindow({ conversation }) {
 
       <div className="chat-input">
         <input
-          value={text}
+  value={text}
+  placeholder="Type a message..."
           onChange={(e) => {
             setText(e.target.value);
 

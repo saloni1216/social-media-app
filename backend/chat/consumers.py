@@ -2,6 +2,8 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from .models import Conversation, Message
+from django.utils import timezone
+from accounts.models import CustomUser
 
 class ChatConsumer(AsyncWebsocketConsumer):
 
@@ -20,28 +22,42 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name,
         )
-
         await self.accept()
-
+        
+        await self.channel_layer.group_add(
+            "online_users",
+            self.channel_name,
+            )
+        await self.set_user_online()
+        print(f"🟢 {self.user.username} is Online")
         print(f"✅ WebSocket Connected : {self.user.username}")
 
     async def disconnect(self, close_code):
         print("❌ WebSocket Disconnected")
         if hasattr(self, "room_group_name"):
-                await self.channel_layer.group_discard(
-                    self.room_group_name,
-                    self.channel_name,
-        )
+            await self.channel_layer.group_discard(
+                self.room_group_name,
+                self.channel_name,
+                )
+            await self.channel_layer.group_discard(
+                "online_users",
+                self.channel_name,
+                )
+
+        if not self.user.is_anonymous:
+            await self.set_user_offline()
+            print(f"⚫ {self.user.username} went Offline")
 
     async def receive(self, text_data):
         data = json.loads(text_data)
         if data.get("type") == "typing":
             await self.channel_layer.group_send(
-                self.room_group_name,
+                "online_users",
                 {
-                    "type": "typing_status",
+                    "type": "user_status",
                     "username": self.user.username,
-                    "typing": data.get("typing"),
+                    "is_online": True,
+                    "last_seen": None,
                     },
                     )
             return
@@ -54,12 +70,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
             text,
         )
         await self.channel_layer.group_send(
-            self.room_group_name,
+            "online_users",
             {
-                "type": "chat_message",
-                "message": saved_message,
-                },
-                )
+                "type": "user_status",
+                "username": self.user.username,
+                "is_online": False,
+                "last_seen": timezone.now().isoformat(),
+    },
+)
      
     async def chat_message(self, event):
         print("➡ Sending to frontend:", event["message"])
@@ -77,6 +95,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     }
                     )
                     )
+
+    async def user_status(self, event):
+        await self.send(
+            text_data=json.dumps({
+                "type": "status",
+                "username": event["username"],
+                "is_online": event["is_online"],
+                "last_seen": event["last_seen"],
+                }))
 
     @database_sync_to_async
     def save_message(self, sender_id, conversation_id, text):
@@ -99,3 +126,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "sender": sender.username,
             "created_at": message.created_at.isoformat(),
             }
+
+    @database_sync_to_async
+    def set_user_online(self):
+        self.user.is_online = True
+        self.user.save(update_fields=["is_online"])
+
+
+    @database_sync_to_async
+    def set_user_offline(self):
+        self.user.is_online = False
+        self.user.last_seen = timezone.now()
+        self.user.save(update_fields=["is_online", "last_seen"])
