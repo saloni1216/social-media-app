@@ -41,6 +41,22 @@ class Message(models.Model):
         related_name="sent_messages"
     )
 
+    is_delivered = models.BooleanField(default=False)
+    is_read = models.BooleanField(default=False)
+    delivered_at = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
+    read_at = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
+    is_deleted = models.BooleanField(default=False)
+    deleted_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        )
+
     text = models.TextField()
 
     is_read = models.BooleanField(

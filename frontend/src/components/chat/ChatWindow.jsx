@@ -25,13 +25,13 @@ function ChatWindow({ conversation }) {
   }, [conversation]);
 
   useEffect(() => {
-  if (!conversation) return;
+    if (!conversation) return;
 
-  setUserStatus({
-    is_online: conversation.other_user.is_online,
-    last_seen: conversation.other_user.last_seen,
-  });
-}, [conversation]);
+    setUserStatus({
+      is_online: conversation.other_user.is_online,
+      last_seen: conversation.other_user.last_seen,
+    });
+  }, [conversation]);
 
   // Connect websocket when conversation changes
   useEffect(() => {
@@ -188,13 +188,29 @@ function ChatWindow({ conversation }) {
                     isMe ? "my-message" : "other-message"
                   }`}
                 >
-                  <p>{message.text}</p>
+                  {message.is_deleted ? (
+                    <p className="deleted-message">
+                      🚫 This message was deleted
+                    </p>
+                  ) : (
+                    <p>{message.text}</p>
+                  )}
 
                   <span>
                     {new Date(message.created_at).toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
                     })}
+
+                    {isMe && (
+                      <small className="message-status">
+                        {message.is_read
+                          ? "✓✓"
+                          : message.is_delivered
+                            ? "✓✓"
+                            : "✓"}
+                      </small>
+                    )}
                   </span>
                 </div>
               </div>
@@ -206,8 +222,8 @@ function ChatWindow({ conversation }) {
 
       <div className="chat-input">
         <input
-  value={text}
-  placeholder="Type a message..."
+          value={text}
+          placeholder="Type a message..."
           onChange={(e) => {
             setText(e.target.value);
 

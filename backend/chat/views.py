@@ -1,3 +1,5 @@
+from time import timezone
+
 from django.contrib.auth import get_user_model
 
 from rest_framework import status
@@ -75,9 +77,7 @@ class StartConversationView(APIView):
 
 class SendMessageView(APIView):
     permission_classes = [IsAuthenticated]
-
     def post(self, request):
-
         conversation_id = request.data.get("conversation_id")
         text = request.data.get("text")
 
@@ -212,20 +212,22 @@ class MarkMessagesReadView(APIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        Message.objects.filter(
+        updated = Message.objects.filter(
             conversation=conversation,
             is_read=False
         ).exclude(
             sender=request.user
         ).update(
-            is_read=True
+            is_read=True,
+            read_at=timezone.now()
         )
 
         return Response(
             {
-                "message": "Messages marked as read"
+                "message": "Messages marked as read",
+                "updated": updated,
             },
-            status=status.HTTP_200_OK
+            status=status.HTTP_200_OK,
         )
     
 class DeleteMessageView(APIView):
@@ -251,8 +253,10 @@ class DeleteMessageView(APIView):
                 },
                 status=status.HTTP_403_FORBIDDEN,
             )
-
-        message.delete()
+        message.is_deleted = True
+        message.deleted_at = timezone.now()
+        message.text = "This message was deleted"
+        message.save()
 
         return Response(
             {

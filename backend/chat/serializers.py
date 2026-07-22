@@ -12,8 +12,13 @@ class MessageSerializer(serializers.ModelSerializer):
             "id",
             "sender",
             "text",
-            "is_read",
             "created_at",
+            "is_delivered",
+            "is_read",
+            "delivered_at",
+            "read_at",
+            "is_deleted",
+            "deleted_at",
         ]
 
 
@@ -59,6 +64,8 @@ class ConversationSerializer(serializers.ModelSerializer):
                 else None
             ),
             "is_verified": user.is_verified,
+            "is_online": user.is_online,
+            "last_seen": user.last_seen,
         }
 
     def get_last_message(self, obj):

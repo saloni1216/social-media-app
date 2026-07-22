@@ -119,12 +119,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
             sender=sender,
             text=text,
             )
+        message.is_delivered = True
+        message.delivered_at = timezone.now()
+        message.save()
         print("Message Saved:", message.id)
         return {
             "id": message.id,
             "text": message.text,
             "sender": sender.username,
             "created_at": message.created_at.isoformat(),
+            "is_delivered": message.is_delivered,
+            "is_read": message.is_read,
             }
 
     @database_sync_to_async
