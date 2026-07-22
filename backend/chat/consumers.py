@@ -80,24 +80,22 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def save_message(self, sender_id, conversation_id, text):
-
-        conversation = Conversation.objects.get(
-            id=conversation_id
-        )
-
-        sender = conversation.participants.get(
-            id=sender_id
-        )
+        print("===== SAVE MESSAGE CALLED =====")
+        print(sender_id, conversation_id, text)
+        conversation = Conversation.objects.get(id=conversation_id)
+        print("Conversation Found")
+        sender = conversation.participants.get(id=sender_id)
+        print("Sender Found")
 
         message = Message.objects.create(
             conversation=conversation,
             sender=sender,
             text=text,
-        )
-
+            )
+        print("Message Saved:", message.id)
         return {
             "id": message.id,
             "text": message.text,
             "sender": sender.username,
             "created_at": message.created_at.isoformat(),
-        }
+            }
