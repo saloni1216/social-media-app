@@ -1,6 +1,8 @@
+from email import message
 import json
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
+from django.core.mail import message
 from django.utils import timezone
 from .models import Conversation, Message
 
@@ -185,11 +187,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             sender=sender,
             text=text,
         )
-
         message.is_delivered = True
         message.delivered_at = timezone.now()
-        message.save()
-        conversation.save()
+        message.save(update_fields=["is_delivered", "delivered_at"])
+        conversation.updated_at = timezone.now()
+        conversation.save(update_fields=["updated_at"])
 
         return {
             "id": message.id,

@@ -2,7 +2,6 @@ import "./ChatWindow.css";
 import { useEffect, useRef, useState } from "react";
 import {
   getMessages,
-  sendMessage,
   markMessagesRead,
 } from "../../services/chatService";
 import { getImageUrl } from "../../utils/imageHelper";
@@ -12,15 +11,18 @@ function ChatWindow({ conversation, refreshConversations }) {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [userStatus, setUserStatus] = useState({is_online: false,last_seen: null,});
+  const [userStatus, setUserStatus] = useState({
+    is_online: false,
+    last_seen: null,
+  });
   const bottomRef = useRef(null);
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     if (!conversation) return;
     loadMessages();
-  }, [conversation]);
-
+  }, [loadMessages]);
+  
 
   useEffect(() => {
     if (!conversation) return;
@@ -31,27 +33,26 @@ function ChatWindow({ conversation, refreshConversations }) {
   }, [conversation]);
 
 
-  useEffect(() => {
-    if (!conversation) return;
-    const socket = connectSocket(conversation.id);
-    socket.onopen = () => {
-      console.log("✅ WebSocket Connected");
-    };
-    
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-       console.log("FULL DATA", data);
-      console.log("Received:", data);
+useEffect(() => {
+  if (!conversation) return;
 
-      if (data.type === "typing") {
+  const socket = connectSocket(conversation.id);
+
+  socketRef.current = socket;
+
+  socket.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+
+    console.log("WS", data);
+
+    switch (data.type) {
+      case "typing":
         if (data.username !== currentUser.username) {
           setIsTyping(data.typing);
         }
         return;
-      }
 
-
-      if (data.type === "status") {
+      case "status":
         if (data.username === conversation.other_user.username) {
           setUserStatus({
             is_online: data.is_online,
@@ -59,16 +60,12 @@ function ChatWindow({ conversation, refreshConversations }) {
           });
         }
         return;
-      }
 
-
-      if (data.type === "conversation_update") {
-        loadConversations();
+      case "conversation_update":
+        refreshConversations?.();
         return;
-      }
 
-
-      if (data.type === "read") {
+      case "read":
         setMessages((prev) =>
           prev.map((msg) =>
             data.message_ids.includes(msg.id)
@@ -76,31 +73,36 @@ function ChatWindow({ conversation, refreshConversations }) {
                   ...msg,
                   is_read: true,
                 }
-              : msg,
-          ),
+              : msg
+          )
         );
-
         return;
-      }
 
-      setMessages((prev) => [...prev, data]);
+      default:
+        setMessages((prev) => {
+          if (prev.find((m) => m.id === data.id)) {
+            return prev;
+          }
 
-      if (refreshConversations) {
-        refreshConversations();
-      }
-    };
+          return [...prev, data];
+        });
 
-    socket.onclose = () => {
-      console.log("❌ WebSocket Disconnected");
-    };
+        refreshConversations?.();
+    }
+  };
 
-    socket.onerror = (error) => {
-      console.log("Socket Error:", error);
-    };
-    return () => {
-      socket.close();
-    };
-  }, [conversation]);
+  socket.onclose = () => {
+    console.log("Disconnected");
+  };
+
+  return () => {
+    socket.onmessage = null;
+    socket.onclose = null;
+    socket.onerror = null;
+    socket.onopen = null;
+  };
+}, [conversation, refreshConversations]);
+
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({
@@ -108,59 +110,77 @@ function ChatWindow({ conversation, refreshConversations }) {
     });
   }, [messages]);
 
+  const loadMessages = useCallback(async () => {
+    if (!conversation) return;
 
-  const loadMessages = async () => {
     try {
       const response = await getMessages(conversation.id);
+
       setMessages(response.data);
+
       try {
         await markMessagesRead(conversation.id);
-      } catch (e) {
-        console.log("Read API missing");
-      }
+      } catch {}
 
       const unreadIds = response.data
-        .filter((m) => !m.is_read && m.sender !== currentUser.username)
+        .filter(
+          (m) =>
+            !m.is_read &&
+            (m.sender?.username || m.sender) !== currentUser.username,
+        )
         .map((m) => m.id);
 
-      const socket = getSocket();
-      if (unreadIds.length && socket && socket.readyState === WebSocket.OPEN) {
-        socket.send(
-          JSON.stringify({
-            type: "read",
-            message_ids: unreadIds,
-          }),
-        );
+      if (unreadIds.length) {
+        const socket = socketRef.current;
+
+        if (socket && socket.readyState === WebSocket.OPEN) {
+          socket.send(
+            JSON.stringify({
+              type: "read",
+              message_ids: unreadIds,
+            }),
+          );
+        }
       }
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [conversation]);
 
-  const handleSend = () => {
-    if (!text.trim()) return;
-    const socket = getSocket();
-    if (socket && socket.readyState === WebSocket.OPEN) {
-      socket.send(
-        JSON.stringify({
-          text: text,
-        }),
-      );
 
-      socket.send(
-        JSON.stringify({
-          type: "typing",
-          typing: false,
-        }),
-      );
-      setText("");
-      if (refreshConversations) {
-        refreshConversations();
-      }
-    } else {
-      console.log("❌ Socket not connected");
-    }
-  };
+ const handleSend = () => {
+  if (!text.trim()) return;
+
+  const socket = socketRef.current;
+
+  if (!socket) {
+    console.log("❌ Socket not found");
+    return;
+  }
+
+  if (socket.readyState !== WebSocket.OPEN) {
+    console.log("❌ Socket not connected");
+    return;
+  }
+
+  socket.send(
+    JSON.stringify({
+      text: text.trim(),
+    })
+  );
+
+  socket.send(
+    JSON.stringify({
+      type: "typing",
+      typing: false,
+    })
+  );
+
+  setText("");
+
+  refreshConversations?.();
+};
+
 
   if (!conversation) {
     return (
@@ -181,7 +201,7 @@ function ChatWindow({ conversation, refreshConversations }) {
 
         <div>
           <h3>{conversation.other_user.full_name}</h3>
-          
+
           {isTyping ? (
             <span className="typing-text">Typing...</span>
           ) : userStatus.is_online ? (
@@ -257,20 +277,35 @@ function ChatWindow({ conversation, refreshConversations }) {
         <input
           value={text}
           placeholder="Type a message..."
-          onChange={(e) => {
-            setText(e.target.value);
+         onChange={(e) => {
+  setText(e.target.value);
 
-            const socket = getSocket();
+  const socket = socketRef.current;
 
-            if (socket && socket.readyState === WebSocket.OPEN) {
-              socket.send(
-                JSON.stringify({
-                  type: "typing",
-                  typing: true,
-                }),
-              );
-            }
-          }}
+  if (!socket) return;
+
+  if (socket.readyState !== WebSocket.OPEN) return;
+
+  socket.send(
+    JSON.stringify({
+      type: "typing",
+      typing: true,
+    })
+  );
+
+  clearTimeout(typingTimeout.current);
+
+  typingTimeout.current = setTimeout(() => {
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(
+        JSON.stringify({
+          type: "typing",
+          typing: false,
+        })
+      );
+    }
+  }, 1000);
+}}
         />
 
         <button onClick={handleSend}>Send</button>
