@@ -24,3 +24,7 @@ export const sendMessage = (conversation_id, text) => {
     text,
   });
 };
+
+export const markMessagesRead = (conversationId) => {
+  return api.post(`chat/messages/${conversationId}/read/`);
+};

@@ -1,24 +1,14 @@
 import "./Chat.css";
-
 import { useEffect, useState } from "react";
-
 import Navbar from "../../components/layout/Navbar/Navbar";
 import Sidebar from "../../components/layout/Sidebar/Sidebar";
-
 import ChatSidebar from "../../components/chat/ChatSidebar";
 import ChatWindow from "../../components/chat/ChatWindow";
-
-import {
-  getUsers,
-  getConversations,
-  startConversation,
-} from "../../services/chatService";
+import {getUsers, getConversations, startConversation,} from "../../services/chatService";
 
 function Chat() {
   const [users, setUsers] = useState([]);
-
   const [conversations, setConversations] = useState([]);
-
   const [selectedConversation, setSelectedConversation] = useState(null);
 
   useEffect(() => {
@@ -38,10 +28,16 @@ function Chat() {
   const loadConversations = async () => {
     try {
       const response = await getConversations();
-
       setConversations(response.data);
+      if (selectedConversation) {
+        const updated = response.data.find(
+          (c) => c.id === selectedConversation.id,
+        );
 
-      if (response.data.length > 0) {
+        if (updated) {
+          setSelectedConversation(updated);
+        }
+      } else if (response.data.length > 0) {
         setSelectedConversation(response.data[0]);
       }
     } catch (err) {
@@ -52,9 +48,7 @@ function Chat() {
   const handleStartChat = async (user) => {
     try {
       const response = await startConversation(user.id);
-
       setSelectedConversation(response.data);
-
       loadConversations();
     } catch (err) {
       console.log(err);
@@ -64,10 +58,8 @@ function Chat() {
   return (
     <>
       <Navbar />
-
       <div className="chat-page">
         <Sidebar />
-
         <div className="chat-container">
           <ChatSidebar
             users={users}
@@ -79,6 +71,7 @@ function Chat() {
 
           <ChatWindow
             conversation={selectedConversation}
+            refreshConversations={loadConversations}
           />
         </div>
       </div>

@@ -1,12 +1,10 @@
-from time import timezone
-
+from django.core.mail import message
+from django.utils import timezone
 from django.contrib.auth import get_user_model
-
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from .models import Conversation, Message
 from .serializers import ConversationSerializer, MessageSerializer
 
@@ -188,14 +186,11 @@ class ConversationMessagesView(APIView):
     
 class MarkMessagesReadView(APIView):
     permission_classes = [IsAuthenticated]
-
     def post(self, request, conversation_id):
-
         try:
             conversation = Conversation.objects.get(
                 id=conversation_id
             )
-
         except Conversation.DoesNotExist:
             return Response(
                 {
@@ -232,9 +227,7 @@ class MarkMessagesReadView(APIView):
     
 class DeleteMessageView(APIView):
     permission_classes = [IsAuthenticated]
-
     def delete(self, request, message_id):
-
         try:
             message = Message.objects.get(id=message_id)
 
@@ -255,8 +248,11 @@ class DeleteMessageView(APIView):
             )
         message.is_deleted = True
         message.deleted_at = timezone.now()
-        message.text = "This message was deleted"
-        message.save()
+        message.save(
+            update_fields=[
+                "is_deleted",
+                "deleted_at",
+                ])
 
         return Response(
             {
