@@ -12,7 +12,10 @@ function ChatWindow({ conversation, refreshConversations }) {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [userStatus, setUserStatus] = useState({is_online: false,last_seen: null,});
+  const [userStatus, setUserStatus] = useState({
+    is_online: false,
+    last_seen: null,
+  });
   const bottomRef = useRef(null);
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
@@ -21,15 +24,13 @@ function ChatWindow({ conversation, refreshConversations }) {
     loadMessages();
   }, [conversation]);
 
-
   useEffect(() => {
     if (!conversation) return;
     setUserStatus({
       is_online: conversation.other_user.is_online,
       last_seen: conversation.other_user.last_seen,
     });
-  }, [conversation]);
-
+ }, [conversation, refreshConversations, currentUser.username]);
 
   useEffect(() => {
     if (!conversation) return;
@@ -37,7 +38,7 @@ function ChatWindow({ conversation, refreshConversations }) {
     socket.onopen = () => {
       console.log("✅ WebSocket Connected");
     };
-    
+
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       if (data.type === "typing") {
@@ -46,7 +47,6 @@ function ChatWindow({ conversation, refreshConversations }) {
         }
         return;
       }
-
 
       if (data.type === "status") {
         if (data.username === conversation.other_user.username) {
@@ -58,12 +58,12 @@ function ChatWindow({ conversation, refreshConversations }) {
         return;
       }
 
-
       if (data.type === "conversation_update") {
-        loadConversations();
+        if (refreshConversations) {
+          refreshConversations();
+        }
         return;
       }
-
 
       if (data.type === "read") {
         setMessages((prev) =>
@@ -104,7 +104,6 @@ function ChatWindow({ conversation, refreshConversations }) {
       behavior: "smooth",
     });
   }, [messages]);
-
 
   const loadMessages = async () => {
     try {
@@ -178,7 +177,7 @@ function ChatWindow({ conversation, refreshConversations }) {
 
         <div>
           <h3>{conversation.other_user.full_name}</h3>
-          
+
           {isTyping ? (
             <span className="typing-text">Typing...</span>
           ) : userStatus.is_online ? (
