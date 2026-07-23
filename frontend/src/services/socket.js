@@ -25,9 +25,11 @@ export const connectSocket = (conversationId) => {
 
   const token = localStorage.getItem("access_token");
 
-  const WS_BASE =
-    import.meta.env.VITE_WS_URL ||
-    "ws://127.0.0.1:8000/ws/chat/";
+ const WS_BASE =
+  import.meta.env.VITE_WS_URL ||
+  (window.location.protocol === "https:"
+    ? "wss://social-media-app-backend-efsz.onrender.com/ws/chat/"
+    : "ws://127.0.0.1:8000/ws/chat/");
 
   socket = new WebSocket(
     `${WS_BASE}${conversationId}/?token=${token}`
