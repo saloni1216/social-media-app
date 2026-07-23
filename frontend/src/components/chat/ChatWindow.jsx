@@ -30,7 +30,7 @@ function ChatWindow({ conversation, refreshConversations }) {
     });
   }, [conversation]);
 
-
+  
   useEffect(() => {
     if (!conversation) return;
     const socket = connectSocket(conversation.id);
