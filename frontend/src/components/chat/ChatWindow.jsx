@@ -30,7 +30,7 @@ function ChatWindow({ conversation, refreshConversations }) {
     });
   }, [conversation]);
 
-  
+
   useEffect(() => {
     if (!conversation) return;
     const socket = connectSocket(conversation.id);
@@ -40,9 +40,6 @@ function ChatWindow({ conversation, refreshConversations }) {
     
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-       console.log("FULL DATA", data);
-      console.log("Received:", data);
-
       if (data.type === "typing") {
         if (data.username !== currentUser.username) {
           setIsTyping(data.typing);
