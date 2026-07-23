@@ -92,22 +92,25 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         )
                 return
             
-            text = data.get("text")
-            if not text:
-                return
-            saved_message = await self.save_message(
-                self.user.id,
-                self.conversation_id,
-                text,
-                )
-            await self.channel_layer.group_send(
+        text = data.get("text")
+        if not text:
+            return
+        
+        saved_message = await self.save_message(
+            self.user.id,
+            self.conversation_id,
+            text,
+            )
+
+        await self.channel_layer.group_send(
                 self.room_group_name,
                 {
                     "type": "chat_message",
                     "message": saved_message,
                     },
                     )
-            await self.channel_layer.group_send(
+            
+        await self.channel_layer.group_send(
                 "online_users",
                 {
                     "type": "conversation_update",

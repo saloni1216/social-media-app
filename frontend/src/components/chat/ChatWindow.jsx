@@ -37,8 +37,10 @@ function ChatWindow({ conversation, refreshConversations }) {
     socket.onopen = () => {
       console.log("✅ WebSocket Connected");
     };
+    
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
+       console.log("FULL DATA", data);
       console.log("Received:", data);
 
       if (data.type === "typing") {
