@@ -30,7 +30,7 @@ function ChatWindow({ conversation, refreshConversations }) {
       is_online: conversation.other_user.is_online,
       last_seen: conversation.other_user.last_seen,
     });
- }, [conversation, refreshConversations, currentUser.username]);
+  }, [conversation]);
 
   useEffect(() => {
     if (!conversation) return;
@@ -95,7 +95,13 @@ function ChatWindow({ conversation, refreshConversations }) {
       console.log("Socket Error:", error);
     };
     return () => {
-      socket.close();
+      if (
+        socket &&
+        (socket.readyState === WebSocket.OPEN ||
+          socket.readyState === WebSocket.CONNECTING)
+      ) {
+        socket.close();
+      }
     };
   }, [conversation]);
 
